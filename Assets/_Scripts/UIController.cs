@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
-    private Action<string> OnBuildAreaHandler;
+    private Action<string> OnBuildZoneHandler;
     private Action<string> OnBuildSingleStructureHandler;
     private Action<string> OnBuildRoadHandler;
 
@@ -59,10 +59,10 @@ public class UIController : MonoBehaviour
         PrepareBuildMenu();
     }
 
-    public void OnBuildAreaCallback(string nameOfStructure) //Made public for testing.
+    public void OnBuildZoneCallback(string nameOfStructure) //Made public for testing.
     {
         PrepareUIForBuilding();
-        OnBuildAreaHandler?.Invoke(nameOfStructure);
+        OnBuildZoneHandler?.Invoke(nameOfStructure);
     }
 
     public void OnBuildRoadCallback(string nameOfStructure) //Made public for testing.
@@ -91,7 +91,7 @@ public class UIController : MonoBehaviour
 
     private void PrepareBuildMenu()
     {
-        CreateButtonsInPanel(zonesPanel.transform, structureRepository.GetZoneNames(), OnBuildAreaCallback);
+        CreateButtonsInPanel(zonesPanel.transform, structureRepository.GetZoneNames(), OnBuildZoneCallback);
         CreateButtonsInPanel(roadsPanel.transform, new List<string>() { structureRepository.GetRoadStructureName() }, OnBuildRoadCallback);
         CreateButtonsInPanel(facilitiesPanel.transform, structureRepository.GetSingleStructureNames(), OnBuildSingleStructureCallback);
     }
@@ -118,14 +118,14 @@ public class UIController : MonoBehaviour
         }
     }
 
-    public void AddListenerOnBuildAreaEvent(Action<string> listener)
+    public void AddListenerOnBuildZoneEvent(Action<string> listener)
     {
-        OnBuildAreaHandler += listener;
+        OnBuildZoneHandler += listener;
     }
 
-    public void RemoveListenerOnBuildAreaEvent(Action<string> listener)
+    public void RemoveListenerOnBuildZoneEvent(Action<string> listener)
     {
-        OnBuildAreaHandler -= listener;
+        OnBuildZoneHandler -= listener;
     }
 
 

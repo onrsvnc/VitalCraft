@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class PlacementManager : MonoBehaviour
 {
-    public UnityEngine.GameObject buildingPrefab;
     public Transform ground;
 
     //CreateBuilding() can be placed in BuildingManager for now it is here.
-    public void CreateBuilding(Vector3 gridPosition, GridStructure grid)
+    public void CreateBuilding(Vector3 gridPosition, GridStructure grid, GameObject buildingPrefab)
     {
         UnityEngine.GameObject newStructure = Instantiate(buildingPrefab, ground.position + gridPosition, Quaternion.identity);
         grid.PlaceStructureOnTheGrid(newStructure, gridPosition);

@@ -7,6 +7,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public PlacementManager placementManager;
+    public StructureRepository structureRepository;
     public IInputManager inputManager;
     public UIController uiController;
     public int width, length;
@@ -20,22 +21,32 @@ public class GameManager : MonoBehaviour
     public PlayerSelectionState selectionState;
     public PlayerBuildingSingleStructureState buildingSingleStructureState;
     public PlayerRemoveBuildingState demolishState;
+    public PlayerBuildingRoadState buildingRoadState;
+    public PlayerBuildingZoneState buildingZoneState;
 
     public PlayerState State { get => state; } //Exposed for testing purposes
 
     void Awake()
     {
-        buildingManager = new BuildingManager(cellSize, width, length, placementManager);
-        selectionState = new PlayerSelectionState(this, cameraMovement);
-        demolishState = new PlayerRemoveBuildingState(this, buildingManager);
-        buildingSingleStructureState = new PlayerBuildingSingleStructureState(this, buildingManager);
-        state = selectionState;
+        PrepareStates();
+
 #if (UNITY_EDITOR && TEST) || !(UNITY_IOS || UNITY_ANDROID)
         inputManager = gameObject.AddComponent<InputManager>();
 #endif
 #if (UNITY_IOS || UNITY_ANDROID)
 
 #endif        
+    }
+
+    private void PrepareStates()
+    {
+        buildingManager = new BuildingManager(cellSize, width, length, placementManager, structureRepository);
+        selectionState = new PlayerSelectionState(this, cameraMovement);
+        demolishState = new PlayerRemoveBuildingState(this, buildingManager);
+        buildingSingleStructureState = new PlayerBuildingSingleStructureState(this, buildingManager);
+        buildingZoneState = new PlayerBuildingZoneState(this, buildingManager);
+        buildingRoadState = new PlayerBuildingRoadState(this, buildingManager);
+        state = selectionState;
     }
 
     void Start()
@@ -53,57 +64,23 @@ public class GameManager : MonoBehaviour
 
     private void AssignUIControllerListeners()
     {
-        uiController.AddListenerOnBuildAreaEvent(StartPlacementMode);
-        uiController.AddListenerOnCancelActionEvent(CancelAction);
-        uiController.AddListenerOnDemolishActionEvent(StartDemolishMode);
+        uiController.AddListenerOnBuildZoneEvent((structureName) => state.OnBuildZone(structureName)); //using lambda expression so that state.OnBuildArea will access the gameManager on the heap and not the stack
+        uiController.AddListenerOnBuildRoadEvent((structureName) => state.OnBuildRoad(structureName));
+        uiController.AddListenerOnBuildSingleStructureEvent((structureName) => state.OnBuildSingleStructure(structureName));
+        uiController.AddListenerOnCancelActionEvent(() => state.OnCancel());
+        uiController.AddListenerOnDemolishActionEvent(() => state.OnDemolishAction());
     }
 
     private void AssignInputListeners()
     {
-        inputManager.AddListenerOnPointerDownEvent(HandleInput);
-        inputManager.AddListenerOnPointerChangeEvent(HandlePointerChange);
-        inputManager.AddListenerOnPointerSecondChangeEvent(HandleInputCameraPan);
-        inputManager.AddListenerOnPointerSecondUpEvent(HandleInputCameraPanStop);
-    }
-
-    private void StartDemolishMode()
-    {
-        TransitionToState(demolishState, null);
-    }
-
-    private void HandlePointerChange(Vector3 position)
-    {
-        state.OnInputPointerChange(position);
-    }
-
-    private void HandleInputCameraPanStop()
-    {
-        state.OnInputPanUp();
-    }
-
-    private void HandleInputCameraPan(Vector3 position)
-    {
-        state.OnInputPanChange(position);
-    }
-
-    private void HandleInput(Vector3 position)
-    {
-        state.OnInputPointerDown(position);
-    }
-
-    private void StartPlacementMode(string variable)
-    {
-        TransitionToState(buildingSingleStructureState, variable);
-    }
-
-    private void CancelAction()
-    {
-        state.OnCancel();
+        inputManager.AddListenerOnPointerDownEvent((position) => state.OnInputPointerDown(position));
+        inputManager.AddListenerOnPointerChangeEvent((position) => state.OnInputPointerChange(position));
+        inputManager.AddListenerOnPointerSecondChangeEvent((position) => state.OnInputPanChange(position));
+        inputManager.AddListenerOnPointerSecondUpEvent(() => state.OnInputPanUp());
     }
 
     public void TransitionToState(PlayerState newState, string variable)
     {
-        // States handling state transitions could be better, but not implemented at the moment.
         this.state = newState;
         this.state.EnterState(variable);
     }

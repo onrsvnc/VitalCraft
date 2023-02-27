@@ -39,5 +39,5 @@ public class PlayerRemoveBuildingState : PlayerState
     public override void OnInputPointerUp()
     {
         return;
-    }
+    } 
 }

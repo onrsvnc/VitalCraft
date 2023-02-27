@@ -13,11 +13,14 @@ public class PlayerSelectionState : PlayerState
 
     public override void OnInputPanChange(Vector3 panPosition)
     {
+        Debug.Log(panPosition);
+        Debug.Log("mouse pressd");
         cameraMovement.MoveCamera(panPosition);
     }
 
     public override void OnInputPanUp()
     {
+        Debug.Log("mouse unpressd");
         cameraMovement.StopCameraMovement();
     }
 
@@ -39,5 +42,25 @@ public class PlayerSelectionState : PlayerState
     public override void OnCancel()
     {
         return;
+    }
+
+    public override void OnBuildZone(string structureName)
+    {
+        this.gameManager.TransitionToState(this.gameManager.buildingZoneState, structureName);
+    }
+
+    public override void OnBuildSingleStructure(string structureName)
+    {
+        this.gameManager.TransitionToState(this.gameManager.buildingSingleStructureState, structureName);
+    }
+    
+    public override void OnBuildRoad(string structureName)
+    {
+        this.gameManager.TransitionToState(this.gameManager.buildingRoadState, structureName);
+    }
+
+    public override void OnDemolishAction()
+    {
+        this.gameManager.TransitionToState(this.gameManager.demolishState, null);
     }
 }
