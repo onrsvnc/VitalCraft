@@ -78,7 +78,8 @@ public enum StructureType
 {
     Zone,
     SingleStructure,
-    Road
+    Road,
+    None
 }
 
 
