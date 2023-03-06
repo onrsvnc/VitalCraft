@@ -12,14 +12,10 @@ public class PlayerBuildingSingleStructureState : PlayerState
         this.buildingManager = buildingManager;
     }
 
-    public override void OnInputPanChange(Vector3 position)
+    public override void OnConfirmAction()
     {
-        return;
-    }
-
-    public override void OnInputPanUp()
-    {
-        return;
+        this.buildingManager.ConfirmPlacement();
+        base.OnConfirmAction();
     }
 
     public override void OnInputPointerChange(Vector3 position)
@@ -29,8 +25,7 @@ public class PlayerBuildingSingleStructureState : PlayerState
 
     public override void OnInputPointerDown(Vector3 position)
     {
-        Debug.Log("Facility Built");
-        this.buildingManager.PlaceStructureAt(position, structureName, StructureType.SingleStructure);
+        this.buildingManager.PrepareStructureForPlacement(position, structureName, StructureType.SingleStructure);
     }
 
     public override void OnInputPointerUp()
@@ -38,8 +33,21 @@ public class PlayerBuildingSingleStructureState : PlayerState
         return;
     }
 
+    public override void OnBuildZone(string structureName)
+    {
+        this.buildingManager.CancelPlacement();
+        base.OnBuildZone(structureName);
+    }
+
+    public override void OnBuildRoad(string structureName)
+    {
+        this.buildingManager.CancelPlacement();
+        base.OnBuildRoad(structureName);
+    }
+
     public override void OnCancel()
     {
+        this.buildingManager.CancelPlacement();
         this.gameManager.TransitionToState(this.gameManager.selectionState, null);
     }
 

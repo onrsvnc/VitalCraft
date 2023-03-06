@@ -16,7 +16,25 @@ public class PlayerBuildingZoneState : PlayerState
 
     public override void OnCancel()
     {
+        this.buildingManager.CancelPlacement();
         this.gameManager.TransitionToState(this.gameManager.selectionState, null);
+    }
+
+    public override void OnBuildRoad(string structureName)
+    {
+        this.buildingManager.CancelPlacement();
+        base.OnBuildRoad(structureName);
+    }
+    public override void OnBuildSingleStructure(string structureName)
+    {
+        this.buildingManager.CancelPlacement();
+        base.OnBuildSingleStructure(structureName);
+    }
+
+    public override void OnConfirmAction()
+    {
+        this.buildingManager.ConfirmPlacement();
+        base.OnConfirmAction();
     }
 
     public override void EnterState(string structureName)
@@ -26,8 +44,7 @@ public class PlayerBuildingZoneState : PlayerState
 
     public override void OnInputPointerDown(Vector3 position)
     {
-        Debug.Log("Area built");
-        this.buildingManager.PlaceStructureAt(position,structureName,StructureType.Zone);
+        this.buildingManager.PrepareStructureForPlacement(position,structureName,StructureType.Zone);
     }
 
 }

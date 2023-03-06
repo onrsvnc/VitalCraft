@@ -102,7 +102,7 @@ public class PlayerStatusTest
         yield return new WaitForEndOfFrame(); //This calls Start
         gameManagerComponent.State.OnDemolishAction();
         yield return new WaitForEndOfFrame();
-        Assert.IsTrue(gameManagerComponent.State is PlayerRemoveBuildingState);
+        Assert.IsTrue(gameManagerComponent.State is PlayerDemolitionState);
         yield return null;
     }
 

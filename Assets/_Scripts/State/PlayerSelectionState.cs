@@ -4,24 +4,9 @@ using UnityEngine;
 
 public class PlayerSelectionState : PlayerState
 {
-    CameraMovement cameraMovement;
-
-    public PlayerSelectionState(GameManager gameManager, CameraMovement cameraMovement) : base(gameManager)
+    public PlayerSelectionState(GameManager gameManager) : base(gameManager)
     {
-        this.cameraMovement = cameraMovement;
-    }
-
-    public override void OnInputPanChange(Vector3 panPosition)
-    {
-        Debug.Log(panPosition);
-        Debug.Log("mouse pressd");
-        cameraMovement.MoveCamera(panPosition);
-    }
-
-    public override void OnInputPanUp()
-    {
-        Debug.Log("mouse unpressd");
-        cameraMovement.StopCameraMovement();
+        
     }
 
     public override void OnInputPointerChange(Vector3 position)

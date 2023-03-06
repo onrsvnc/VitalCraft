@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 
     public PlayerSelectionState selectionState;
     public PlayerBuildingSingleStructureState buildingSingleStructureState;
-    public PlayerRemoveBuildingState demolishState;
+    public PlayerDemolitionState demolishState;
     public PlayerBuildingRoadState buildingRoadState;
     public PlayerBuildingZoneState buildingZoneState;
 
@@ -41,8 +41,8 @@ public class GameManager : MonoBehaviour
     private void PrepareStates()
     {
         buildingManager = new BuildingManager(cellSize, width, length, placementManager, structureRepository);
-        selectionState = new PlayerSelectionState(this, cameraMovement);
-        demolishState = new PlayerRemoveBuildingState(this, buildingManager);
+        selectionState = new PlayerSelectionState(this);
+        demolishState = new PlayerDemolitionState(this, buildingManager);
         buildingSingleStructureState = new PlayerBuildingSingleStructureState(this, buildingManager);
         buildingZoneState = new PlayerBuildingZoneState(this, buildingManager);
         buildingRoadState = new PlayerBuildingRoadState(this, buildingManager);
@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviour
         uiController.AddListenerOnBuildSingleStructureEvent((structureName) => state.OnBuildSingleStructure(structureName));
         uiController.AddListenerOnCancelActionEvent(() => state.OnCancel());
         uiController.AddListenerOnDemolishActionEvent(() => state.OnDemolishAction());
+        uiController.AddListenerOnConfirmActionEvent(()=> state.OnConfirmAction());
     }
 
     private void AssignInputListeners()
