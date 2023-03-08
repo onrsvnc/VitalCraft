@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StructureDemolitionHelper : StructureModificationHelper
 {
-    public StructureDemolitionHelper(StructureRepository structureRepository, GridStructure grid, PlacementManager placementManager) : base(structureRepository, grid, placementManager)
+    public StructureDemolitionHelper(StructureRepository structureRepository, GridStructure grid, IPlacementManager placementManager) : base(structureRepository, grid, placementManager)
     {
     }
 
@@ -51,7 +51,7 @@ public class StructureDemolitionHelper : StructureModificationHelper
 
     private void RevokeStructureDemolitionAt(Vector3Int gridPositionInt, GameObject structure)
     {
-        placementManager.ResetBuildingMaterial(structure);
+        placementManager.ResetBuildingLook(structure);
         structuresToBeModified.Remove(gridPositionInt);
     }
 

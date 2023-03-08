@@ -14,6 +14,7 @@ namespace Tests
     {
         UIController uiController;
         GameManager gameManagerComponent;
+        PlacementManager placementManager; //Added line for testing.
 
         // Old Test Setup without the use of Nsubstitute
         // [SetUp] // Init() will be executed before each test 
@@ -47,13 +48,18 @@ namespace Tests
         public void Init()
         {
             UnityEngine.GameObject gameManagerObject = new UnityEngine.GameObject();
+            UnityEngine.GameObject placementManagerTestGameObject = new UnityEngine.GameObject(); //Added line for testing
+            
             var cameraMovementComponent = gameManagerObject.AddComponent<CameraMovement>();
 
             uiController = Substitute.For<UIController>(); //Usually interface or abstract classes are used to subsitute for.
+            placementManager = Substitute.For<PlacementManager>(); //Added line for testing
 
+            placementManagerTestGameObject.AddComponent<PlacementManager>(); //Added line for testing
             gameManagerComponent = gameManagerObject.AddComponent<GameManager>();
             gameManagerComponent.cameraMovement = cameraMovementComponent;
             gameManagerComponent.uiController = uiController;
+            gameManagerComponent.placementManagerGameObject = placementManagerTestGameObject; //Added line for tesing
         }
 
         [UnityTest]

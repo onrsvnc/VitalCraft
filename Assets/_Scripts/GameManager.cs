@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public PlacementManager placementManager;
+    public GameObject placementManagerGameObject;
+    private IPlacementManager placementManager;
     public StructureRepository structureRepository;
     public IInputManager inputManager;
     public UIController uiController;
@@ -28,8 +29,6 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        PrepareStates();
-
 #if (UNITY_EDITOR && TEST) || !(UNITY_IOS || UNITY_ANDROID)
         inputManager = gameObject.AddComponent<InputManager>();
 #endif
@@ -51,6 +50,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        placementManager = placementManagerGameObject.GetComponent<IPlacementManager>();
+        PrepareStates();
         PrepareGameComponents();
         AssignInputListeners();
         AssignUIControllerListeners();

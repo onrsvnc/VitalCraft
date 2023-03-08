@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: e390a2cf4ed33a749b44f2a2f6130b1d, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -606,7 +606,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6f1d7cf5ac75d04cacf769e198bd5aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placementManager: {fileID: 1684234747}
+  placementManagerGameObject: {fileID: 1684234745}
   structureRepository: {fileID: 1719840786}
   uiController: {fileID: 144178116}
   width: 100
@@ -2155,7 +2155,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6731485614218584843, guid: 98fba9453c34cc14f9389c615414ed72, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 350
       objectReference: {fileID: 0}
     - target: {fileID: 6731485614218584843, guid: 98fba9453c34cc14f9389c615414ed72, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -2179,7 +2179,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6731485614283717333, guid: 98fba9453c34cc14f9389c615414ed72, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 350
       objectReference: {fileID: 0}
     - target: {fileID: 6731485614283717333, guid: 98fba9453c34cc14f9389c615414ed72, type: 3}
       propertyPath: m_AnchoredPosition.y

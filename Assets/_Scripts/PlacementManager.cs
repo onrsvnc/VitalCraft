@@ -2,14 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlacementManager : MonoBehaviour
+public interface IPlacementManager
+{
+    GameObject CreateGhostStructure(Vector3 gridPosition, GameObject buildingPrefab);
+    void DestroySingleStructure(GameObject structure);
+    void DestroyStructures(IEnumerable<GameObject> structureCollection);
+    void PlaceStructuresOnTheMap(IEnumerable<GameObject> structureCollection);
+    void ResetBuildingLook(GameObject structure);
+    void SetBuildingForDemolition(GameObject structureToDemolish);
+}
+
+public class PlacementManager : MonoBehaviour, IPlacementManager
 {
     public Transform ground;
     public Material transparentMaterial;
     private Dictionary<GameObject, Material[]> originalMaterials = new Dictionary<GameObject, Material[]>();
 
     // CreateBuilding() can be placed in BuildingManager for now it is here.
-    // Non-Ghost building system code.
+    // Old Non-Ghost building system code.
     // public void CreateBuilding(Vector3 gridPosition, GridStructure grid, GameObject buildingPrefab)
     // {
     //     UnityEngine.GameObject newStructure = Instantiate(buildingPrefab, ground.position + gridPosition, Quaternion.identity);
@@ -48,13 +58,13 @@ public class PlacementManager : MonoBehaviour
         foreach (var structure in structureCollection)
         {
 
-            ResetBuildingMaterial(structure);
+            ResetBuildingLook(structure);
 
         }
         originalMaterials.Clear();
     }
 
-    public void ResetBuildingMaterial(GameObject structure)
+    public void ResetBuildingLook(GameObject structure)
     {
         foreach (Transform child in structure.transform)
         {
@@ -80,6 +90,7 @@ public class PlacementManager : MonoBehaviour
         Destroy(structure);
     }
 
+    // Old Code
     // public void RemoveBuilding(Vector3 gridPosition, GridStructure grid)
     // {
     //     var structure = grid.GetStructureFromTheGrid(gridPosition);

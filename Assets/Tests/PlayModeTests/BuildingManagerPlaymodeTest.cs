@@ -6,6 +6,7 @@ using UnityEngine.TestTools;
 using NSubstitute;
 using System;
 
+//This test is obsolete due to the fact that there are tests for helper, grid, and placement manager separately already.
 namespace Tests
 {
     [TestFixture]
@@ -42,7 +43,8 @@ namespace Tests
         {
             Vector3 inputPosition = PreparePlacement();
             PrepareDemolition(inputPosition);
-            buildingManager.ConfirmDemolition();
+            buildingManager.PrepareBuildingManager(typeof(PlayerDemolitionState));
+            buildingManager.ConfirmModification();
             yield return new WaitForEndOfFrame();
             Assert.IsNull(buildingManager.CheckForStructureInGrid(inputPosition));
         }
@@ -61,7 +63,8 @@ namespace Tests
         {
             Vector3 inputPosition = PreparePlacement();
             PrepareDemolition(inputPosition);
-            buildingManager.CancelDemolition();
+            buildingManager.PrepareBuildingManager(typeof(PlayerDemolitionState));
+            buildingManager.CancelModification();
             yield return new WaitForEndOfFrame();
             Assert.IsNotNull(buildingManager.CheckForStructureInGrid(inputPosition));
         }
@@ -70,7 +73,7 @@ namespace Tests
         public IEnumerator BuildingManagerPlaymodePlacementCancelTest()
         {
             Vector3 inputPosition = PreparePlacement();
-            buildingManager.CancelPlacement();
+            buildingManager.CancelModification();
             yield return new WaitForEndOfFrame();
             Assert.IsNull(buildingManager.CheckForStructureInGrid(inputPosition));
         }
@@ -79,7 +82,7 @@ namespace Tests
         public IEnumerator BuildingManagerPlaymodePlacementConfirmationPassTest()
         {
             Vector3 inputPosition = PreparePlacement();
-            buildingManager.ConfirmPlacement();
+            buildingManager.ConfirmModification();
             yield return new WaitForEndOfFrame();
             Assert.IsNotNull(buildingManager.CheckForStructureInGrid(inputPosition));
         }
@@ -105,7 +108,7 @@ namespace Tests
         public IEnumerator BuildingManagerPlaymodeMaterialChangePlacementConfirmTest()
         {
             Vector3 inputPosition = PreparePlacement();
-            buildingManager.ConfirmPlacement();
+            buildingManager.ConfirmModification();
             Material material = AccessMaterial(() => buildingManager.CheckForStructureInGrid(inputPosition));
             yield return new WaitForEndOfFrame();
             Assert.AreEqual(material.color, Color.blue);
@@ -126,7 +129,8 @@ namespace Tests
         {
             Vector3 inputPosition = PreparePlacement();
             PrepareDemolition(inputPosition);
-            buildingManager.CancelDemolition();
+            buildingManager.PrepareBuildingManager(typeof(PlayerDemolitionState));
+            buildingManager.CancelModification();
             Material material = AccessMaterial(() => buildingManager.CheckForStructureInGrid(inputPosition));
             yield return new WaitForEndOfFrame();
             Assert.AreEqual(material.color, Color.blue);
@@ -136,13 +140,15 @@ namespace Tests
         {
             Vector3 inputPosition = new Vector3(1, 0, 1);
             string structureName = "Road";
-            buildingManager.PrepareStructureForPlacement(inputPosition, structureName, StructureType.Road);
+            buildingManager.PrepareBuildingManager(typeof(PlayerBuildingRoadState));
+            buildingManager.PrepareStructureForModification(inputPosition, structureName, StructureType.Road);
             return inputPosition;
         }
 
         private void PrepareDemolition(Vector3 inputPosition)
         {
-            buildingManager.ConfirmPlacement();
+            buildingManager.ConfirmModification();
+            buildingManager.PrepareBuildingManager(typeof(PlayerDemolitionState));
             buildingManager.PrepareStructureForDemolitionAt(inputPosition);
         }
 
