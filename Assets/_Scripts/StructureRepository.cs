@@ -41,7 +41,7 @@ public class StructureRepository : MonoBehaviour
             default:
                 throw new Exception("No such type. not implemented for " + structureType);
         }
-        if(structurePrefabToReturn == null)
+        if (structurePrefabToReturn == null)
         {
             throw new Exception("No prefab for that name  " + structureName);
         }
@@ -69,6 +69,22 @@ public class StructureRepository : MonoBehaviour
         if (foundStructure != null)
         {
             return foundStructure.prefab;
+        }
+        return null;
+    }
+
+    public StructureBaseSO GetStructureData(string structureName, StructureType structureType)
+    {
+        switch (structureType)
+        {
+            case StructureType.Zone:
+                return modelDataCollection.zonesList.Where(structure => structure.buildingName == structureName).FirstOrDefault();
+            case StructureType.SingleStructure:
+                return modelDataCollection.singleStructureList.Where(structure => structure.buildingName == structureName).FirstOrDefault();
+            case StructureType.Road:
+                return modelDataCollection.roadStructure;
+            case StructureType.None:
+                return null;
         }
         return null;
     }

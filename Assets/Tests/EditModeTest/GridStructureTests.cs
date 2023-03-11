@@ -62,7 +62,7 @@ namespace Tests
             //Act
             Vector3 returnPosition = structure.CalculateGridPosition(position);
             UnityEngine.GameObject testGameObject = new UnityEngine.GameObject("TestGameObject");
-            structure.PlaceStructureOnTheGrid(testGameObject, returnPosition);
+            structure.PlaceStructureOnTheGrid(testGameObject, returnPosition,null);
             //Assert
             Assert.IsTrue(structure.IsCellTaken(returnPosition));
         }
@@ -75,7 +75,7 @@ namespace Tests
             //Act
             Vector3 returnPosition = structure.CalculateGridPosition(position);
             UnityEngine.GameObject testGameObject = new UnityEngine.GameObject("TestGameObject");
-            structure.PlaceStructureOnTheGrid(testGameObject, returnPosition);
+            structure.PlaceStructureOnTheGrid(testGameObject, returnPosition,null);
             //Assert
             Assert.IsTrue(structure.IsCellTaken(returnPosition));
         }
@@ -88,7 +88,7 @@ namespace Tests
             //Act
             Vector3 returnPosition = structure.CalculateGridPosition(position);
             UnityEngine.GameObject testGameObject = new UnityEngine.GameObject("TestGameObject");
-            structure.PlaceStructureOnTheGrid(testGameObject, returnPosition);
+            structure.PlaceStructureOnTheGrid(testGameObject, returnPosition,null);
             //Assert
             Assert.IsTrue(structure.IsCellTaken(returnPosition));
         }
@@ -101,7 +101,7 @@ namespace Tests
             //Act
             Vector3 returnPosition = structure.CalculateGridPosition(position);
             UnityEngine.GameObject testGameObject = null;
-            structure.PlaceStructureOnTheGrid(testGameObject, returnPosition);
+            structure.PlaceStructureOnTheGrid(testGameObject, returnPosition,null);
             //Assert
             Assert.IsFalse(structure.IsCellTaken(returnPosition));
         }
@@ -124,7 +124,7 @@ namespace Tests
             //Arrange
             Cell cell = new Cell();
             //Act
-            cell.SetConstruction(new UnityEngine.GameObject());
+            cell.SetConstruction(new UnityEngine.GameObject(),null);
             //Assert
             Assert.IsTrue(cell.IsTaken);
         }
@@ -135,7 +135,7 @@ namespace Tests
             //Arrange
             Cell cell = new Cell();
             //Act
-            cell.SetConstruction(null);
+            cell.SetConstruction(null,null);
             //Assert
             Assert.IsFalse(cell.IsTaken);
         }

@@ -14,7 +14,7 @@ namespace Tests
         public void CellSetGameObjectPass()
         {
             Cell cell = new Cell();
-            cell.SetConstruction(new GameObject());
+            cell.SetConstruction(new GameObject(),null);
             Assert.IsTrue(cell.IsTaken);
         }
 
@@ -23,7 +23,7 @@ namespace Tests
         public void CellSetGameObjectNullFail()
         {
             Cell cell = new Cell();
-            cell.SetConstruction(null);
+            cell.SetConstruction(null,null);
             Assert.IsFalse(cell.IsTaken);
         }
 
@@ -32,7 +32,7 @@ namespace Tests
         public void CellSetGameObjectRemovePass()
         {
             Cell cell = new Cell();
-            cell.SetConstruction(new GameObject());
+            cell.SetConstruction(new GameObject(),null);
             cell.RemoveStructure();
             Assert.IsFalse(cell.IsTaken);
         }

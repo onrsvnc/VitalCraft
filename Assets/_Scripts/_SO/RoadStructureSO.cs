@@ -10,4 +10,13 @@ public class RoadStructureSO : StructureBaseSO
     [Tooltip("Road Facing Up & Right & Down")]
     public UnityEngine.GameObject threewayPrefab;
     public UnityEngine.GameObject fourwayPrefab;
+    public RotationValue prefabRotation = RotationValue.R0;
+}
+
+public enum RotationValue
+{
+    R0,
+    R90,
+    R180,
+    R270
 }

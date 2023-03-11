@@ -14,8 +14,8 @@ namespace Tests
         Vector3 gridPosition2 = new Vector3(3, 0, 3);
         GameObject tempObject = null;
         StructureModificationHelper helper;
-        string structureName = "Road";
-        StructureType structureType = StructureType.Road;
+        // string structureName = "Road";
+        // StructureType structureType = StructureType.Road;
         GridStructure grid;
 
         [SetUp]
@@ -27,12 +27,13 @@ namespace Tests
             placementManager.CreateGhostStructure(default, default).ReturnsForAnyArgs(tempObject);
             grid = new GridStructure(3, 10, 10);
 
-            grid.PlaceStructureOnTheGrid(tempObject, gridPosition1);
-            grid.PlaceStructureOnTheGrid(tempObject, gridPosition2);
+            grid.PlaceStructureOnTheGrid(tempObject, gridPosition1,null);
+            grid.PlaceStructureOnTheGrid(tempObject, gridPosition2,null);
 
             helper = new StructureDemolitionHelper(structureRepository, grid, placementManager);
             
         }
+        
         [Test]
         public void StructureDemolitionHelperSelectForDemolitionPasses()
         {

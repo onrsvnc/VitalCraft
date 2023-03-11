@@ -10,6 +10,7 @@ public class SingleStructurePlacementHelper : StructureModificationHelper
 
     public override void PrepareStructureForModification(Vector3 inputPosition, string structureName, StructureType structureType)
     {
+        base.PrepareStructureForModification(inputPosition,structureName,structureType);
         GameObject buildingPrefab = this.structureRepository.GetBuildingPrefabByName(structureName, structureType);
         Vector3 gridPosition = grid.CalculateGridPosition(inputPosition);
         var gridPositionInt = Vector3Int.FloorToInt(gridPosition);
@@ -26,21 +27,7 @@ public class SingleStructurePlacementHelper : StructureModificationHelper
         }
     }
 
-    public override void ConfirmModification()
-    {
-        placementManager.PlaceStructuresOnTheMap(structuresToBeModified.Values);
-        foreach (var keyValuePair in structuresToBeModified)
-        {
-            grid.PlaceStructureOnTheGrid(keyValuePair.Value, keyValuePair.Key);
-        }
-        structuresToBeModified.Clear();
-    }
-
-    public override void CancelModification()
-    {
-        placementManager.DestroyStructures(structuresToBeModified.Values);
-        structuresToBeModified.Clear();
-    }
+    
 
     private void PlaceNewStructureAt(GameObject buildingPrefab, Vector3 gridPosition, Vector3Int gridPositionInt)
     {

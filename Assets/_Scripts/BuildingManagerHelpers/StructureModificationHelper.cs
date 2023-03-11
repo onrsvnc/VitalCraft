@@ -6,6 +6,7 @@ public abstract class StructureModificationHelper
 {
     protected Dictionary<Vector3Int, GameObject> structuresToBeModified = new Dictionary<Vector3Int, GameObject>();
     protected readonly StructureRepository structureRepository;
+    protected StructureBaseSO structureData;
     protected readonly GridStructure grid;
     protected readonly IPlacementManager placementManager;
 
@@ -27,9 +28,35 @@ public abstract class StructureModificationHelper
         return null;
     }
 
-    public abstract void PrepareStructureForModification(Vector3 inputPosition, string structureName, StructureType structureType);
-    public abstract void ConfirmModification();
-    public abstract void CancelModification();
+    public virtual void PrepareStructureForModification(Vector3 inputPosition, string structureName, StructureType structureType)
+    {
+        if(structureData == null && structureType != StructureType.None)
+        {
+            structureData = this.structureRepository.GetStructureData(structureName,structureType);
+        }
+    }
+
+    public virtual void ConfirmModification()
+    {
+        placementManager.PlaceStructuresOnTheMap(structuresToBeModified.Values);
+        foreach (var keyValuePair in structuresToBeModified)
+        {
+            grid.PlaceStructureOnTheGrid(keyValuePair.Value, keyValuePair.Key, GameObject.Instantiate(structureData));
+        }
+        ResetHelpersData();
+    }
+
+    public virtual void CancelModification()
+    {
+        placementManager.DestroyStructures(structuresToBeModified.Values);
+        ResetHelpersData();
+    }
+
+    private void ResetHelpersData()
+    {
+        structuresToBeModified.Clear();
+        structureData = null;
+    }
 
 
 }

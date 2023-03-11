@@ -87,4 +87,8 @@ public class GameManager : MonoBehaviour
         this.state.EnterState(variable);
     }
 
+
+
+    
+
 }

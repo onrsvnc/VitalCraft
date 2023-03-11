@@ -2,16 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IPlacementManager
-{
-    GameObject CreateGhostStructure(Vector3 gridPosition, GameObject buildingPrefab);
-    void DestroySingleStructure(GameObject structure);
-    void DestroyStructures(IEnumerable<GameObject> structureCollection);
-    void PlaceStructuresOnTheMap(IEnumerable<GameObject> structureCollection);
-    void ResetBuildingLook(GameObject structure);
-    void SetBuildingForDemolition(GameObject structureToDemolish);
-}
-
 public class PlacementManager : MonoBehaviour, IPlacementManager
 {
     public Transform ground;
@@ -26,11 +16,36 @@ public class PlacementManager : MonoBehaviour, IPlacementManager
     //     grid.PlaceStructureOnTheGrid(newStructure, gridPosition);
     // }
 
-    public GameObject CreateGhostStructure(Vector3 gridPosition, GameObject buildingPrefab)
+    public GameObject CreateGhostStructure(Vector3 gridPosition, GameObject buildingPrefab, RotationValue rotationValue = RotationValue.R0)
     {
-        GameObject newStructure = Instantiate(buildingPrefab, ground.position + gridPosition, Quaternion.identity);
+        GameObject newStructure = PlaceStructureOnTheMap(gridPosition, buildingPrefab, rotationValue);
         Color colorToSet = Color.green;
         ModifyStructurePrefabLook(newStructure, colorToSet);
+        return newStructure;
+    }
+
+    public GameObject PlaceStructureOnTheMap(Vector3 gridPosition, GameObject buildingPrefab, RotationValue rotationValue)
+    {
+        GameObject newStructure = Instantiate(buildingPrefab, ground.position + gridPosition, Quaternion.identity);
+        Vector3 rotation = Vector3.zero;
+        switch (rotationValue)
+        {
+            case RotationValue.R0:
+                break;
+            case RotationValue.R90:
+                rotation = new Vector3(0, 90, 0);
+                break;
+            case RotationValue.R180:
+                rotation = new Vector3(0, 180, 0);
+                break;
+            case RotationValue.R270:
+                rotation = new Vector3(0, 270, 0);
+                break;
+        }
+        foreach (Transform child in newStructure.transform)
+        {
+            child.Rotate(rotation, Space.World);
+        }
         return newStructure;
     }
 
@@ -44,6 +59,7 @@ public class PlacementManager : MonoBehaviour, IPlacementManager
                 originalMaterials.Add(child.gameObject, renderer.materials);
             }
             Material[] materialsToSet = new Material[renderer.materials.Length];
+            colorToSet.a = 0.5f;
             for (int i = 0; i < materialsToSet.Length; i++)
             {
                 materialsToSet[i] = transparentMaterial;
