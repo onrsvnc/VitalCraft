@@ -15,28 +15,28 @@ namespace Tests
         BuildingManager buildingManager;
         Material materialTransparent;
 
-        [SetUp]
-        public void InitBeforeEveryTest()
-        {
-            PlacementManager placementManager = Substitute.For<PlacementManager>();
-            materialTransparent = new Material(Shader.Find("Standard"));
-            placementManager.transparentMaterial = materialTransparent;
-            GameObject ground = new GameObject();
-            ground.transform.position = Vector3.zero;
-            placementManager.ground = ground.transform;
-            StructureRepository structureRepository = Substitute.For<StructureRepository>();
-            CollectionSO collection = new CollectionSO();
-            RoadStructureSO road = new RoadStructureSO();
-            road.buildingName = "Road";
-            GameObject roadChild = new GameObject("Road", typeof(MeshRenderer));
-            roadChild.GetComponent<MeshRenderer>().material.color = Color.blue;
-            GameObject roadPrefab = new GameObject("Road");
-            roadChild.transform.SetParent(roadPrefab.transform);
-            road.prefab = roadPrefab;
-            collection.roadStructure = road;
-            structureRepository.modelDataCollection = collection;
-            buildingManager = new BuildingManager(3, 10, 10, placementManager, structureRepository);
-        }
+        // [SetUp]
+        // public void InitBeforeEveryTest()
+        // {
+        //     PlacementManager placementManager = Substitute.For<PlacementManager>();
+        //     materialTransparent = new Material(Shader.Find("Standard"));
+        //     placementManager.transparentMaterial = materialTransparent;
+        //     GameObject ground = new GameObject();
+        //     ground.transform.position = Vector3.zero;
+        //     placementManager.ground = ground.transform;
+        //     StructureRepository structureRepository = Substitute.For<StructureRepository>();
+        //     CollectionSO collection = new CollectionSO();
+        //     RoadStructureSO road = new RoadStructureSO();
+        //     road.buildingName = "Road";
+        //     GameObject roadChild = new GameObject("Road", typeof(MeshRenderer));
+        //     roadChild.GetComponent<MeshRenderer>().material.color = Color.blue;
+        //     GameObject roadPrefab = new GameObject("Road");
+        //     roadChild.transform.SetParent(roadPrefab.transform);
+        //     road.prefab = roadPrefab;
+        //     collection.roadStructure = road;
+        //     structureRepository.modelDataCollection = collection;
+        //     buildingManager = new BuildingManager(3, 10, 10, placementManager, structureRepository);
+        // }
 
         // [UnityTest]
         // public IEnumerator BuildingManagerPlaymodeDemolishConfirmationTest()
