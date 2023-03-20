@@ -97,12 +97,44 @@ public class GridStructure
                 break;
         }
         var index = CalculateGridIndex(neighbourPosition.Value);
-        if(CheckIndexValidity(index) == false)
+        if (CheckIndexValidity(index) == false)
         {
             return null;
         }
         return neighbourPosition;
 
+    }
+
+    public HashSet<Vector3Int> GetAllPositionsFromTo(Vector3Int minPoint, Vector3Int maxPoint)
+    {
+        HashSet<Vector3Int> positionsToReturn = new HashSet<Vector3Int>();
+        for (int row = minPoint.z; row <= maxPoint.z; row++)
+        {
+            for (int column = minPoint.x; column <= maxPoint.x; column++)
+            {
+                Vector3 gridPosition = CalculateGridPosition(new Vector3(column, 0, row));
+                positionsToReturn.Add(Vector3Int.FloorToInt(gridPosition));
+            }
+        }
+        return positionsToReturn;
+    }
+
+    public IEnumerable<StructureBaseSO> GetAllStructures()
+    {
+        List<StructureBaseSO> structureDataList = new List<StructureBaseSO>();
+        for (int row = 0; row < grid.GetLength(0); row++)
+        {
+            for (int column = 0; column < grid.GetLength(1); column++)
+            {
+                var data = grid[row, column].GetStructureData();
+                if (data != null)
+                {
+                    structureDataList.Add(data);
+                }
+            }
+        }
+
+        return structureDataList;
     }
 }
 

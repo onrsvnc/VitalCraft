@@ -32,16 +32,23 @@ public class UIController : MonoBehaviour
 
     public GameObject buildButtonPrefab;
 
+    public TextMeshProUGUI moneyValue;
+
     void Start()
     {
         buildingMenuPanel.SetActive(false);
         cancelActionPanel.SetActive(false);
-       //buildResidentialAreaButton.onClick.AddListener(OnBuildAreaCallback);
+        //buildResidentialAreaButton.onClick.AddListener(OnBuildAreaCallback);
         cancelActionButton.onClick.AddListener(OnCancelActionCallback);
         openBuildMenuButton.onClick.AddListener(OnOpenBuildMenu);
         demolishButton.onClick.AddListener(OnDemolishHandler);
         closeBuildMenuButton.onClick.AddListener(OnCloseMenuHandler);
         confirmActionButton.onClick.AddListener(OnConfirmActionCallback);
+    }
+
+    public void SetMoneyValue(int money)
+    {
+        moneyValue.text = money + "";
     }
 
     private void OnCloseMenuHandler()
@@ -107,12 +114,12 @@ public class UIController : MonoBehaviour
 
     private void CreateButtonsInPanel(Transform panelTransform, List<string> dataToShow, Action<string> callback)
     {
-        if(dataToShow.Count > panelTransform.childCount)
+        if (dataToShow.Count > panelTransform.childCount)
         {
-            int quantityDifference = dataToShow.Count-panelTransform.childCount;
+            int quantityDifference = dataToShow.Count - panelTransform.childCount;
             for (int i = 0; i < quantityDifference; i++)
             {
-                Instantiate(buildButtonPrefab,panelTransform);
+                Instantiate(buildButtonPrefab, panelTransform);
             }
         }
         for (int i = 0; i < panelTransform.childCount; i++)
@@ -122,7 +129,7 @@ public class UIController : MonoBehaviour
             {
                 button.GetComponentInChildren<TextMeshProUGUI>().SetText(dataToShow[i]); //SetText() used instead of <TextMeshProUGUI>().text = dataToShow[i]; to avoid creating a new string object every time the text is updated. Might result in a bug?
                 button.onClick.RemoveAllListeners();
-                button.onClick.AddListener(()=>callback(button.GetComponentInChildren<TextMeshProUGUI>().text)); 
+                button.onClick.AddListener(() => callback(button.GetComponentInChildren<TextMeshProUGUI>().text));
             }
         }
     }
@@ -188,10 +195,6 @@ public class UIController : MonoBehaviour
     {
         OnBuildRoadHandler -= listener;
     }
-
-    
-
-
 
 
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 public class StructureDemolitionHelper : StructureModificationHelper
 {
     Dictionary<Vector3Int, GameObject> roadToDemolish = new Dictionary<Vector3Int, GameObject>();
-    public StructureDemolitionHelper(StructureRepository structureRepository, GridStructure grid, IPlacementManager placementManager) : base(structureRepository, grid, placementManager)
+    public StructureDemolitionHelper(StructureRepository structureRepository, GridStructure grid, IPlacementManager placementManager, IResourceManager resourceManager) : base(structureRepository, grid, placementManager, resourceManager)
     {
     }
 
@@ -19,11 +19,13 @@ public class StructureDemolitionHelper : StructureModificationHelper
             var structure = grid.GetStructureFromTheGrid(gridPosition);
             if (structuresToBeModified.ContainsKey(gridPositionInt))
             {
+                resourceManager.AddMoney(resourceManager.DemolitionPrice);
                 RevokeStructureDemolitionAt(gridPositionInt, structure);
             }
-            else
+            else if(resourceManager.CanIBuyIt(resourceManager.DemolitionPrice))
             {
                 AddStructureForDemolition(gridPositionInt, structure);
+                resourceManager.SpendMoney(resourceManager.DemolitionPrice);
             }
 
         }
@@ -50,6 +52,10 @@ public class StructureDemolitionHelper : StructureModificationHelper
 
     public override void CancelModification()
     {
+        foreach (var item in structuresToBeModified)
+        {
+            resourceManager.AddMoney(resourceManager.DemolitionPrice);
+        }
         this.placementManager.PlaceStructuresOnTheMap(structuresToBeModified.Values);
         structuresToBeModified.Clear();
     }

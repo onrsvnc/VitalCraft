@@ -1,22 +1,24 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
 namespace Tests
 {
+    [TestFixture] //Added when some data will be placed inside.
     public class GridStructureTests
     {
-        GridStructure structure;
-        [OneTimeSetUp]
+        GridStructure grid;
+        [SetUp]
         public void Init()
         {
-            structure = new GridStructure(3, 100, 100);
+            grid = new GridStructure(3, 100, 100);
         }
 
-        #region GridPositionTest
+        #region GridPositionTests
         // A Test behaves as an ordinary method
         [Test]
         public void CalculateGridPositionPasses()
@@ -24,7 +26,7 @@ namespace Tests
             //Arrange
             Vector3 position = new Vector3(0, 0, 0);
             //Act
-            Vector3 returnPosition = structure.CalculateGridPosition(position);
+            Vector3 returnPosition = grid.CalculateGridPosition(position);
             //Assert
             Assert.AreEqual(Vector3.zero, returnPosition);
         }
@@ -35,7 +37,7 @@ namespace Tests
             //Arrange
             Vector3 position = new Vector3(2.9f, 0, 2.9f);
             //Act
-            Vector3 returnPosition = structure.CalculateGridPosition(position);
+            Vector3 returnPosition = grid.CalculateGridPosition(position);
             //Assert
             Assert.AreEqual(Vector3.zero, returnPosition);
         }
@@ -46,13 +48,49 @@ namespace Tests
             //Arrange
             Vector3 position = new Vector3(3.1f, 0, 0);
             //Act
-            Vector3 returnPosition = structure.CalculateGridPosition(position);
+            Vector3 returnPosition = grid.CalculateGridPosition(position);
             //Assert
             Assert.AreNotEqual(Vector3.zero, returnPosition);
         }
+
+        [Test]
+        public void GetPositionOfTheNeighbourIfExistsTestPass()
+        {
+
+            Vector3 position = new Vector3(0, 0, 0);
+
+            var neighbourPosition = grid.GetPositionOfTheNeighbourIfExists(position, Direction.Up);
+            Assert.AreEqual(new Vector3Int(0, 0, 3), neighbourPosition.Value);
+        }
+
+        [Test]
+        public void GetPositionOfTheNeighbourIfExistsTestFail()
+        {
+
+            Vector3 position = new Vector3(0, 0, 0);
+
+            var neighbourPosition = grid.GetPositionOfTheNeighbourIfExists(position, Direction.Down);
+            Assert.IsFalse(neighbourPosition.HasValue);
+        }
+
+        [Test]
+        public void GetAllPositionsFromTo()
+        {
+            Vector3Int startPosition = new Vector3Int(0, 0, 0);
+            Vector3Int endPosition = new Vector3Int(6, 0, 3);
+
+            var returnValues = grid.GetAllPositionsFromTo(startPosition, endPosition);
+            Assert.IsTrue(returnValues.Count == 6);
+            Assert.IsTrue(returnValues.Contains(new Vector3Int(0, 0, 0)));
+            Assert.IsTrue(returnValues.Contains(new Vector3Int(3, 0, 0)));
+            Assert.IsTrue(returnValues.Contains(new Vector3Int(6, 0, 0)));
+            Assert.IsTrue(returnValues.Contains(new Vector3Int(0, 0, 3)));
+            Assert.IsTrue(returnValues.Contains(new Vector3Int(3, 0, 3)));
+            Assert.IsTrue(returnValues.Contains(new Vector3Int(6, 0, 3)));
+        }
         #endregion
 
-        #region GridIndexTest
+        #region GridIndexTests
         // A Test behaves as an ordinary method
         [Test]
         public void PlaceStructure303AndCheckIsTakenPasses()
@@ -60,11 +98,11 @@ namespace Tests
             //Arrange
             Vector3 position = new Vector3(3, 0, 3);
             //Act
-            Vector3 returnPosition = structure.CalculateGridPosition(position);
+            Vector3 returnPosition = grid.CalculateGridPosition(position);
             UnityEngine.GameObject testGameObject = new UnityEngine.GameObject("TestGameObject");
-            structure.PlaceStructureOnTheGrid(testGameObject, returnPosition, null);
+            grid.PlaceStructureOnTheGrid(testGameObject, returnPosition, null);
             //Assert
-            Assert.IsTrue(structure.IsCellTaken(returnPosition));
+            Assert.IsTrue(grid.IsCellTaken(returnPosition));
         }
 
         [Test]
@@ -73,11 +111,11 @@ namespace Tests
             //Arrange
             Vector3 position = new Vector3(0, 0, 0);
             //Act
-            Vector3 returnPosition = structure.CalculateGridPosition(position);
+            Vector3 returnPosition = grid.CalculateGridPosition(position);
             UnityEngine.GameObject testGameObject = new UnityEngine.GameObject("TestGameObject");
-            structure.PlaceStructureOnTheGrid(testGameObject, returnPosition, null);
+            grid.PlaceStructureOnTheGrid(testGameObject, returnPosition, null);
             //Assert
-            Assert.IsTrue(structure.IsCellTaken(returnPosition));
+            Assert.IsTrue(grid.IsCellTaken(returnPosition));
         }
 
         [Test]
@@ -86,11 +124,11 @@ namespace Tests
             //Arrange
             Vector3 position = new Vector3(297, 0, 297);
             //Act
-            Vector3 returnPosition = structure.CalculateGridPosition(position);
+            Vector3 returnPosition = grid.CalculateGridPosition(position);
             UnityEngine.GameObject testGameObject = new UnityEngine.GameObject("TestGameObject");
-            structure.PlaceStructureOnTheGrid(testGameObject, returnPosition, null);
+            grid.PlaceStructureOnTheGrid(testGameObject, returnPosition, null);
             //Assert
-            Assert.IsTrue(structure.IsCellTaken(returnPosition));
+            Assert.IsTrue(grid.IsCellTaken(returnPosition));
         }
 
         [Test]
@@ -99,11 +137,11 @@ namespace Tests
             //Arrange
             Vector3 position = new Vector3(3, 0, 3);
             //Act
-            Vector3 returnPosition = structure.CalculateGridPosition(position);
+            Vector3 returnPosition = grid.CalculateGridPosition(position);
             UnityEngine.GameObject testGameObject = null;
-            structure.PlaceStructureOnTheGrid(testGameObject, returnPosition, null);
+            grid.PlaceStructureOnTheGrid(testGameObject, returnPosition, null);
             //Assert
-            Assert.IsFalse(structure.IsCellTaken(returnPosition));
+            Assert.IsFalse(grid.IsCellTaken(returnPosition));
         }
 
         [Test]
@@ -113,11 +151,11 @@ namespace Tests
             Vector3 position = new Vector3(303, 0, 303);
             //Act
             //Assert
-            Assert.Throws<IndexOutOfRangeException>(() => structure.IsCellTaken(position));
+            Assert.Throws<IndexOutOfRangeException>(() => grid.IsCellTaken(position));
         }
         #endregion
 
-        #region CellTest
+        #region GridCellTests
         [Test]
         public void CellSetGameObjectPass()
         {
@@ -142,28 +180,23 @@ namespace Tests
         #endregion
 
         [Test]
-        public void GetPositionOfTheNeighbourIfExistsTestPass()
+        public void GetDataStructureTest()
         {
-
-            Vector3 position = new Vector3(0, 0, 0);
-
-            var neighbourPosition = structure.GetPositionOfTheNeighbourIfExists(position, Direction.Up);
-            Assert.AreEqual(new Vector3Int(0, 0, 3), neighbourPosition.Value);
+            RoadStructureSO road = ScriptableObject.CreateInstance<RoadStructureSO>();
+            SingleStructureBaseSO singleStructure = ScriptableObject.CreateInstance<SingleFacilitySO>();
+            GameObject gameObject = new GameObject();
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(0, 0, 0), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(99, 0, 0), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(0, 0, 99), singleStructure);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(99, 0, 99), singleStructure);
+            var list = grid.GetAllStructures().ToList();
+            Assert.IsTrue(list.Count == 4);
         }
 
-        [Test]
-        public void GetPositionOfTheNeighbourIfExistsTestFail()
-        {
 
-            Vector3 position = new Vector3(0, 0, 0);
-
-            var neighbourPosition = structure.GetPositionOfTheNeighbourIfExists(position, Direction.Down);
-            Assert.IsFalse(neighbourPosition.HasValue);
-        }
-        
     }
 
-    
+
 
 }
 

@@ -435,6 +435,7 @@ MonoBehaviour:
   roadsPanel: {fileID: 1682332680}
   closeBuildMenuButton: {fileID: 413930922}
   buildButtonPrefab: {fileID: 2739715498893644197, guid: f07b8945867e5f7408910f8db66057e1, type: 3}
+  moneyValue: {fileID: 856719539}
 --- !u!4 &144178117
 Transform:
   m_ObjectHideFlags: 0
@@ -615,6 +616,7 @@ MonoBehaviour:
   inputMask:
     serializedVersion: 2
     m_Bits: 64
+  resourceManagerGameObject: {fileID: 1656068956}
 --- !u!4 &182671755
 Transform:
   m_ObjectHideFlags: 0
@@ -1381,6 +1383,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: 40, z: -5}
+--- !u!114 &856719539 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2106531332639344044, guid: 98fba9453c34cc14f9389c615414ed72, type: 3}
+  m_PrefabInstance: {fileID: 1715772334}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1006935952
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1740,6 +1753,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1493211443}
   m_CullTransparentMesh: 1
+--- !u!1 &1656068956
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1656068958}
+  - component: {fileID: 1656068957}
+  m_Layer: 0
+  m_Name: ResourceManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1656068957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1656068956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60d517af85fdb5a44b0dd5a6cc5f60ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startMoneyAmount: 5000
+  demolitionPrice: 20
+  moneyCalculationInterval: 2
+  uiController: {fileID: 144178116}
+--- !u!4 &1656068958
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1656068956}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1682332680
 GameObject:
   m_ObjectHideFlags: 0
@@ -2155,7 +2216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6731485614218584843, guid: 98fba9453c34cc14f9389c615414ed72, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 350
       objectReference: {fileID: 0}
     - target: {fileID: 6731485614218584843, guid: 98fba9453c34cc14f9389c615414ed72, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -2179,7 +2240,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6731485614283717333, guid: 98fba9453c34cc14f9389c615414ed72, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 350
       objectReference: {fileID: 0}
     - target: {fileID: 6731485614283717333, guid: 98fba9453c34cc14f9389c615414ed72, type: 3}
       propertyPath: m_AnchoredPosition.y

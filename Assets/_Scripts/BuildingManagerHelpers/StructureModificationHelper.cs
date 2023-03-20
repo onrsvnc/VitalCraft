@@ -2,19 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class StructureModificationHelper 
+public abstract class StructureModificationHelper
 {
     protected Dictionary<Vector3Int, GameObject> structuresToBeModified = new Dictionary<Vector3Int, GameObject>();
     protected readonly StructureRepository structureRepository;
     protected StructureBaseSO structureData;
     protected readonly GridStructure grid;
     protected readonly IPlacementManager placementManager;
+    protected IResourceManager resourceManager;
 
-    public StructureModificationHelper(StructureRepository structureRepository, GridStructure grid, IPlacementManager placementManager)
+    public StructureModificationHelper(StructureRepository structureRepository, GridStructure grid, IPlacementManager placementManager, IResourceManager resourceManager)
     {
         this.structureRepository = structureRepository;
         this.grid = grid;
         this.placementManager = placementManager;
+        this.resourceManager = resourceManager;
     }
 
     //This method is created for unit testing purposes.
@@ -30,9 +32,9 @@ public abstract class StructureModificationHelper
 
     public virtual void PrepareStructureForModification(Vector3 inputPosition, string structureName, StructureType structureType)
     {
-        if(structureData == null && structureType != StructureType.None)
+        if (structureData == null && structureType != StructureType.None)
         {
-            structureData = this.structureRepository.GetStructureData(structureName,structureType);
+            structureData = this.structureRepository.GetStructureData(structureName, structureType);
         }
     }
 
@@ -57,6 +59,12 @@ public abstract class StructureModificationHelper
         structuresToBeModified.Clear();
         structureData = null;
     }
+
+    public virtual void StopContinuousPlacement()
+    {
+
+    }
+
 
 
 }

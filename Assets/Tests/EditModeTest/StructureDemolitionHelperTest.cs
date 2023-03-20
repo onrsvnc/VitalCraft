@@ -27,13 +27,16 @@ namespace Tests
             placementManager.CreateGhostStructure(default, default).ReturnsForAnyArgs(tempObject);
             grid = new GridStructure(3, 10, 10);
 
-            grid.PlaceStructureOnTheGrid(tempObject, gridPosition1,null);
-            grid.PlaceStructureOnTheGrid(tempObject, gridPosition2,null);
+            grid.PlaceStructureOnTheGrid(tempObject, gridPosition1, null);
+            grid.PlaceStructureOnTheGrid(tempObject, gridPosition2, null);
 
-            helper = new StructureDemolitionHelper(structureRepository, grid, placementManager);
-            
+            IResourceManager resourceManager = Substitute.For<IResourceManager>();
+            resourceManager.CanIBuyIt(default).Returns(true);
+
+            helper = new StructureDemolitionHelper(structureRepository, grid, placementManager, resourceManager);
+
         }
-        
+
         [Test]
         public void StructureDemolitionHelperSelectForDemolitionPasses()
         {

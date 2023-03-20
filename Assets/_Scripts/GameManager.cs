@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour
 
     private PlayerState state;
 
+    public GameObject resourceManagerGameObject;
+    private IResourceManager resourceManager;
+
     public PlayerSelectionState selectionState;
     public PlayerBuildingSingleStructureState buildingSingleStructureState;
     public PlayerDemolitionState demolishState;
@@ -39,7 +42,8 @@ public class GameManager : MonoBehaviour
 
     private void PrepareStates()
     {
-        buildingManager = new BuildingManager(cellSize, width, length, placementManager, structureRepository);
+        buildingManager = new BuildingManager(cellSize, width, length, placementManager, structureRepository, resourceManager);
+        resourceManager.PrepareResourceManager(buildingManager);
         selectionState = new PlayerSelectionState(this);
         demolishState = new PlayerDemolitionState(this, buildingManager);
         buildingSingleStructureState = new PlayerBuildingSingleStructureState(this, buildingManager);
@@ -51,6 +55,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         placementManager = placementManagerGameObject.GetComponent<IPlacementManager>();
+        resourceManager = resourceManagerGameObject.GetComponent<IResourceManager>(); 
         PrepareStates();
         PrepareGameComponents();
         AssignInputListeners();
@@ -70,7 +75,7 @@ public class GameManager : MonoBehaviour
         uiController.AddListenerOnBuildSingleStructureEvent((structureName) => state.OnBuildSingleStructure(structureName));
         uiController.AddListenerOnCancelActionEvent(() => state.OnCancel());
         uiController.AddListenerOnDemolishActionEvent(() => state.OnDemolishAction());
-        uiController.AddListenerOnConfirmActionEvent(()=> state.OnConfirmAction());
+        uiController.AddListenerOnConfirmActionEvent(() => state.OnConfirmAction());
     }
 
     private void AssignInputListeners()
@@ -79,6 +84,7 @@ public class GameManager : MonoBehaviour
         inputManager.AddListenerOnPointerChangeEvent((position) => state.OnInputPointerChange(position));
         inputManager.AddListenerOnPointerSecondChangeEvent((position) => state.OnInputPanChange(position));
         inputManager.AddListenerOnPointerSecondUpEvent(() => state.OnInputPanUp());
+        inputManager.AddListenerOnPointerUpEvent(() => state.OnInputPointerUp());
     }
 
     public void TransitionToState(PlayerState newState, string variable)
@@ -89,6 +95,6 @@ public class GameManager : MonoBehaviour
 
 
 
-    
+
 
 }

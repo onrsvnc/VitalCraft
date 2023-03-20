@@ -7,13 +7,15 @@ public static class StructureModificationFactory
 {
     private static StructureModificationHelper singleStructurePlacementHelper;
     private static StructureModificationHelper structureDemolitionHelper;
-    private static RoadPlacementModificationHelper roadStructurePlacementHelper;
+    private static StructureModificationHelper roadStructurePlacementHelper;
+    private static StructureModificationHelper zonePlacementHelper;
 
-    public static void PrepareFactory(StructureRepository structureRepository, GridStructure grid, IPlacementManager placementManager)
+    public static void PrepareFactory(StructureRepository structureRepository, GridStructure grid, IPlacementManager placementManager, IResourceManager resourceManager)
     {
-        singleStructurePlacementHelper = new SingleStructurePlacementHelper(structureRepository, grid, placementManager);
-        structureDemolitionHelper = new StructureDemolitionHelper(structureRepository, grid, placementManager);
-        roadStructurePlacementHelper = new RoadPlacementModificationHelper(structureRepository, grid, placementManager);
+        singleStructurePlacementHelper = new SingleStructurePlacementHelper(structureRepository, grid, placementManager, resourceManager);
+        structureDemolitionHelper = new StructureDemolitionHelper(structureRepository, grid, placementManager, resourceManager);
+        roadStructurePlacementHelper = new RoadPlacementModificationHelper(structureRepository, grid, placementManager, resourceManager);
+        zonePlacementHelper = new ZonePlacementHelper(structureRepository, grid, placementManager, Vector3.zero, resourceManager); //Accounting for changing position of the ground a valid a mapBottomLeftCorner should be passed here instead of this Vector3
     }
 
     public static StructureModificationHelper GetHelper(Type classType)
@@ -21,6 +23,10 @@ public static class StructureModificationFactory
         if (classType == typeof(PlayerDemolitionState))
         {
             return structureDemolitionHelper;
+        }
+        else if (classType == typeof(PlayerBuildingZoneState))
+        {
+            return zonePlacementHelper;
         }
         else if (classType == typeof(PlayerBuildingRoadState))
         {

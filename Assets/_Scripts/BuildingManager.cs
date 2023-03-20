@@ -9,15 +9,15 @@ public class BuildingManager
     IPlacementManager placementManager;
     StructureRepository structureRepository;
     StructureModificationHelper helper;
-    
 
-    public BuildingManager(int cellSize, int width, int length, IPlacementManager placementManager, StructureRepository structureRepository)
+
+    public BuildingManager(int cellSize, int width, int length, IPlacementManager placementManager, StructureRepository structureRepository, IResourceManager resourceManager)
     {
         this.grid = new GridStructure(cellSize, width, length);
         this.placementManager = placementManager;
         this.structureRepository = structureRepository;
-        StructureModificationFactory.PrepareFactory(structureRepository,grid,placementManager);
-        
+        StructureModificationFactory.PrepareFactory(structureRepository, grid, placementManager, resourceManager);
+
     }
 
     public void PrepareBuildingManager(Type classType)
@@ -45,7 +45,7 @@ public class BuildingManager
         helper.PrepareStructureForModification(inputPosition, "", StructureType.None);
     }
 
-    
+
     //This method is created for unit testing purposes.
     public GameObject CheckForStructureInGrid(Vector3 inputPosition)
     {
@@ -63,7 +63,7 @@ public class BuildingManager
         Vector3 gridPosition = grid.CalculateGridPosition(inputPosition);
         GameObject structureToReturn = null;
         structureToReturn = helper.AccessStructureInDictionary(gridPosition);
-        if(structureToReturn != null)
+        if (structureToReturn != null)
         {
             return structureToReturn;
         }
@@ -71,7 +71,13 @@ public class BuildingManager
         return structureToReturn;
     }
 
+    public void StopContinuousPlacement()
+    {
+        helper.StopContinuousPlacement();
+    }
 
-
-
+    public IEnumerable<StructureBaseSO> GetAllStructures()
+    {
+        return grid.GetAllStructures();
+    }
 }

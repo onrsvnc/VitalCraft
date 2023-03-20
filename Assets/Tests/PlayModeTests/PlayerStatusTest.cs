@@ -49,7 +49,8 @@ namespace Tests
         {
             UnityEngine.GameObject gameManagerObject = new UnityEngine.GameObject();
             UnityEngine.GameObject placementManagerTestGameObject = new UnityEngine.GameObject(); //Added line for testing
-            
+            gameManagerObject.AddComponent<ResourceManagerTestStub>();
+
             var cameraMovementComponent = gameManagerObject.AddComponent<CameraMovement>();
 
             uiController = Substitute.For<UIController>(); //Usually interface or abstract classes are used to subsitute for.
@@ -57,6 +58,7 @@ namespace Tests
 
             placementManagerTestGameObject.AddComponent<PlacementManager>(); //Added line for testing
             gameManagerComponent = gameManagerObject.AddComponent<GameManager>();
+            gameManagerComponent.resourceManagerGameObject = gameManagerObject;
             gameManagerComponent.cameraMovement = cameraMovementComponent;
             gameManagerComponent.uiController = uiController;
             gameManagerComponent.placementManagerGameObject = placementManagerTestGameObject; //Added line for tesing

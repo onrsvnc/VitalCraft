@@ -7,7 +7,7 @@ public class RoadPlacementModificationHelper : StructureModificationHelper
 {
     Dictionary<Vector3Int, GameObject> existingRoadStructuresToBeModified = new Dictionary<Vector3Int, GameObject>();
 
-    public RoadPlacementModificationHelper(StructureRepository structureRepository, GridStructure grid, IPlacementManager placementManager) : base(structureRepository, grid, placementManager)
+    public RoadPlacementModificationHelper(StructureRepository structureRepository, GridStructure grid, IPlacementManager placementManager, IResourceManager resourceManager) : base(structureRepository, grid, placementManager, resourceManager)
     {
     }
 
@@ -18,14 +18,16 @@ public class RoadPlacementModificationHelper : StructureModificationHelper
         if (grid.IsCellTaken(gridPosition) == false)
         {
             var gridPositionInt = Vector3Int.FloorToInt(gridPosition);
-            var roadStructure = RoadManager.GetCorrectRoadPrefab(gridPosition, structureData, structuresToBeModified,grid);
+            var roadStructure = RoadManager.GetCorrectRoadPrefab(gridPosition, structureData, structuresToBeModified, grid);
             if (structuresToBeModified.ContainsKey(gridPositionInt))
             {
                 RevokeRoadPlacementAt(gridPositionInt);
+                resourceManager.AddMoney(structureData.placementCost);
             }
-            else
+            else if (resourceManager.CanIBuyIt(structureData.placementCost))
             {
                 PlaceNewRoadAt(roadStructure, gridPosition, gridPositionInt);
+                resourceManager.SpendMoney(structureData.placementCost);
             }
             AdjustNeighboursIfAreRoadStructures(gridPosition);
         }
@@ -85,19 +87,20 @@ public class RoadPlacementModificationHelper : StructureModificationHelper
         structuresToBeModified.Remove(gridPositionInt);
     }
 
-    
+
 
     public override void CancelModification()
     {
+        resourceManager.AddMoney(structuresToBeModified.Count * structureData.placementCost);
         base.CancelModification();
         existingRoadStructuresToBeModified.Clear();
     }
 
     public override void ConfirmModification()
     {
-        RoadManager.ModifyRoadCellsOnTheGrid(existingRoadStructuresToBeModified, structureData, structuresToBeModified,grid,placementManager); 
+        RoadManager.ModifyRoadCellsOnTheGrid(existingRoadStructuresToBeModified, structureData, structuresToBeModified, grid, placementManager);
         base.ConfirmModification();
     }
 
-    
+
 }
