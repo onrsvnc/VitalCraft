@@ -179,6 +179,97 @@ namespace Tests
         }
         #endregion
 
+        #region StructureRangeTests
+
+        [Test]
+        public void GetDataStructureInRange1Contains4Test()
+        {
+            RoadStructureSO road = new RoadStructureSO();
+            SingleStructureBaseSO singleStructure = new SingleFacilitySO();
+            GameObject gameObject = new GameObject();
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(3, 0, 3), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(6, 0, 3), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(9, 0, 3), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(3, 0, 9), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(6, 0, 9), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(9, 0, 9), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(3, 0, 6), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(9, 0, 6), road);
+            var list = grid.GetStructuresDataInRange(new Vector3(6, 0, 6), 1).ToList();
+            Assert.IsTrue(list.Count == 4);
+        }
+
+        [Test]
+        public void GetDataStructureInRange1Contains2Test()
+        {
+            RoadStructureSO road = new RoadStructureSO();
+            SingleStructureBaseSO singleStructure = new SingleFacilitySO();
+            GameObject gameObject = new GameObject();
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(3, 0, 3), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(6, 0, 3), singleStructure);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(9, 0, 3), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(3, 0, 9), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(6, 0, 9), singleStructure);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(9, 0, 9), road);
+            var list = grid.GetStructuresDataInRange(new Vector3(6, 0, 6), 1).ToList();
+            Assert.IsTrue(list.Count == 2);
+            Assert.IsTrue(list[0] == singleStructure);
+            Assert.IsTrue(list[1] == singleStructure);
+        }
+
+        [Test]
+        public void GetDataStructureInRange1Contains3Test()
+        {
+            RoadStructureSO road = new RoadStructureSO();
+            SingleStructureBaseSO singleStructure = new SingleFacilitySO();
+            GameObject gameObject = new GameObject();
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(3, 0, 3), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(6, 0, 3), singleStructure);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(9, 0, 3), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(3, 0, 9), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(6, 0, 9), singleStructure);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(9, 0, 9), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(3, 0, 6), road);
+            var list = grid.GetStructuresDataInRange(new Vector3(6, 0, 6), 1).ToList();
+            Assert.IsTrue(list.Count == 3);
+            Assert.IsTrue(list.Contains(singleStructure));
+            Assert.IsTrue(list.Contains(road));
+        }
+
+        [Test]
+        public void GetDataStructureInRange1Contains0Test()
+        {
+            RoadStructureSO road = new RoadStructureSO();
+            SingleStructureBaseSO singleStructure = new SingleFacilitySO();
+            GameObject gameObject = new GameObject();
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(3, 0, 3), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(9, 0, 3), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(3, 0, 9), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(9, 0, 9), road);
+            var list = grid.GetStructuresDataInRange(new Vector3(6, 0, 6), 1).ToList();
+            Assert.IsTrue(list.Count == 0);
+        }
+
+        [Test]
+        public void GetDataStructureInRange2Contains8Test()
+        {
+            RoadStructureSO road = new RoadStructureSO();
+            SingleStructureBaseSO singleStructure = new SingleFacilitySO();
+            GameObject gameObject = new GameObject();
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(3, 0, 3), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(6, 0, 3), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(9, 0, 3), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(3, 0, 9), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(6, 0, 9), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(9, 0, 9), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(3, 0, 6), road);
+            grid.PlaceStructureOnTheGrid(gameObject, new Vector3(9, 0, 6), road);
+            var list = grid.GetStructuresDataInRange(new Vector3(6, 0, 6), 2).ToList();
+            Assert.IsTrue(list.Count == 8);
+        }
+
+        #endregion
+
         [Test]
         public void GetDataStructureTest()
         {
@@ -192,8 +283,6 @@ namespace Tests
             var list = grid.GetAllStructures().ToList();
             Assert.IsTrue(list.Count == 4);
         }
-
-
     }
 
 

@@ -9,6 +9,7 @@ public class ResourceManager : MonoBehaviour, IResourceManager
     [SerializeField] private int demolitionPrice = 20;
     [SerializeField] private float moneyCalculationInterval = 2;
     MoneyHelper moneyHelper;
+    PopulationHelper populationHelper;
     private BuildingManager buildingManager;
     public UIController uiController;
 
@@ -20,7 +21,8 @@ public class ResourceManager : MonoBehaviour, IResourceManager
     void Start()
     {
         moneyHelper = new MoneyHelper(startMoneyAmount);
-        UpdateMoneyValueUI();
+        populationHelper = new PopulationHelper();
+        UpdateUI();
     }
 
     public void PrepareResourceManager(BuildingManager buildingManager)
@@ -36,7 +38,7 @@ public class ResourceManager : MonoBehaviour, IResourceManager
             try
             {
                 moneyHelper.ReduceMoney(amount);
-                UpdateMoneyValueUI();
+                UpdateUI();
                 return true;
             }
             catch (MoneyException)
@@ -50,7 +52,7 @@ public class ResourceManager : MonoBehaviour, IResourceManager
     public void AddMoney(int amount)
     {
         moneyHelper.AddMoney(amount);
-        UpdateMoneyValueUI();
+        UpdateUI();
     }
 
     private void ReloadGame()
@@ -72,7 +74,7 @@ public class ResourceManager : MonoBehaviour, IResourceManager
         try
         {
             moneyHelper.CalculateMoney(buildingManager.GetAllStructures());
-            UpdateMoneyValueUI();
+            UpdateUI();
         }
         catch (MoneyException)
         {
@@ -85,15 +87,28 @@ public class ResourceManager : MonoBehaviour, IResourceManager
         CancelInvoke();
     }
 
-    private void UpdateMoneyValueUI()
+    private void UpdateUI()
     {
         uiController.SetMoneyValue(moneyHelper.Money);
+        uiController.SetPopulationValue(populationHelper.Population);
     }
 
     public int HowManyStructuresCanIPlace(int placementCost, int numberOfStructures)
     {
         int amount = (int)(moneyHelper.Money / placementCost);
         return amount > numberOfStructures ? numberOfStructures : amount;
+    }
+
+    public void AddToPopulation(int value)
+    {
+        populationHelper.AddToPopulation(value);
+        UpdateUI();
+    }
+
+    public void ReduceToPopulation(int value)
+    {
+        populationHelper.ReducePopulation(value);
+        UpdateUI();
     }
 
     // Update is called once per frame

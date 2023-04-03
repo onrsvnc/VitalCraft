@@ -31,6 +31,12 @@ public class PlayerBuildingZoneState : PlayerState
         base.OnBuildSingleStructure(structureName);
     }
 
+    public override void OnDemolishAction()
+    {
+        this.buildingManager.CancelModification();
+        base.OnDemolishAction();
+    }
+
     public override void OnConfirmAction()
     {
         this.buildingManager.ConfirmModification();
@@ -45,7 +51,7 @@ public class PlayerBuildingZoneState : PlayerState
 
     public override void OnInputPointerDown(Vector3 position)
     {
-        this.buildingManager.PrepareStructureForModification(position,structureName,StructureType.Zone);
+        this.buildingManager.PrepareStructureForModification(position, structureName, StructureType.Zone);
     }
 
     public override void OnInputPointerChange(Vector3 position)

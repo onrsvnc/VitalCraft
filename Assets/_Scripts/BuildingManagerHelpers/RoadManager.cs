@@ -37,7 +37,7 @@ public static class RoadManager
 
     public static bool CheckIfNeighbourIsRoadInDictionary(Vector3Int? neighbourPosition, Dictionary<Vector3Int, GameObject> structuresToBeModified)
     {
-        if(structuresToBeModified==null)
+        if (structuresToBeModified == null)
             return false;
         return structuresToBeModified.ContainsKey(neighbourPosition.Value);
     }
@@ -129,7 +129,7 @@ public static class RoadManager
         return dictionaryToReturn;
     }
 
-    public static void ModifyRoadCellsOnTheGrid(Dictionary<Vector3Int, GameObject> neighbourDictionary, StructureBaseSO structureData, 
+    public static void ModifyRoadCellsOnTheGrid(Dictionary<Vector3Int, GameObject> neighbourDictionary, StructureBaseSO structureData,
         Dictionary<Vector3Int, GameObject> structuresToBeModified, GridStructure grid, IPlacementManager placementManager)
     {
         foreach (var keyValuePair in neighbourDictionary)
@@ -138,12 +138,12 @@ public static class RoadManager
             placementManager.DestroySingleStructure(keyValuePair.Value);
             var roadStructure = GetCorrectRoadPrefab(keyValuePair.Key, structureData, structuresToBeModified, grid);
             var stucture = placementManager.PlaceStructureOnTheMap(keyValuePair.Key, roadStructure.RoadPrefab, roadStructure.RoadPrefabRotation);
-            grid.PlaceStructureOnTheGrid(stucture, keyValuePair.Key, structureData);
+            grid.PlaceStructureOnTheGrid(stucture, keyValuePair.Key, GameObject.Instantiate(structureData));
         }
         neighbourDictionary.Clear();
     }
 
-    public static RoadStructureHelper GetCorrectRoadPrefab(Vector3 gridPosition, StructureBaseSO structureData, 
+    public static RoadStructureHelper GetCorrectRoadPrefab(Vector3 gridPosition, StructureBaseSO structureData,
         Dictionary<Vector3Int, GameObject> structuresToBeModified, GridStructure grid) //this possibly be turned into a helper object
     {
         var neighbourStatus = RoadManager.GetRoadNeighboursStatus(gridPosition, grid, structuresToBeModified);

@@ -136,6 +136,65 @@ public class GridStructure
 
         return structureDataList;
     }
+
+    public IEnumerable<StructureBaseSO> GetStructuresDataInRange(Vector3 gridPosition, int range)
+    {
+        var cellIndex = CalculateGridIndex(gridPosition);
+        List<StructureBaseSO> listToReturn = new List<StructureBaseSO>();
+        if (CheckIndexValidity(cellIndex) == false)
+            return listToReturn;
+        for (int row = cellIndex.y - range; row <= cellIndex.y + range; row++)
+        {
+            for (int column = cellIndex.x - range; column <= cellIndex.x + range; column++)
+            {
+                var tempPosition = new Vector2Int(column, row);
+                if (CheckIndexValidity(tempPosition) && Vector2.Distance(cellIndex, tempPosition) <= range)
+                {
+                    var data = grid[row, column].GetStructureData();
+                    if (data != null)
+                    {
+                        listToReturn.Add(data);
+                    }
+                }
+            }
+        }
+        return listToReturn;
+    }
+
+    internal List<Vector3Int> GetStructurePositionsInRange(Vector3Int gridPosition, int range) //Internal acces may cause issues. Investigate if encountered.
+    {
+        var cellIndex = CalculateGridIndex(gridPosition);
+        List<Vector3Int> listToReturn = new List<Vector3Int>();
+        if (CheckIndexValidity(cellIndex) == false)
+            return listToReturn;
+        for (int row = cellIndex.y - range; row <= cellIndex.y + range; row++)
+        {
+            for (int column = cellIndex.x - range; column <= cellIndex.x + range; column++)
+            {
+                var tempPosition = new Vector2Int(column, row);
+                if (CheckIndexValidity(tempPosition) && Vector2.Distance(cellIndex, tempPosition) <= range)
+                {
+                    var data = grid[row, column].GetStructureData();
+                    if (data != null)
+                    {
+                        listToReturn.Add(GetGridPositionFromIndex(tempPosition));
+                    }
+                }
+            }
+        }
+        return listToReturn;
+    }
+
+    private Vector3Int GetGridPositionFromIndex(Vector2Int tempPosition)
+    {
+        return new Vector3Int(tempPosition.x * cellSize, 0, tempPosition.y * cellSize);
+    }
+
+    public bool ArePositionsInRange(Vector3Int gridPosition, Vector3Int structurePositionNearby, int range)
+    {
+        var distance = Vector2.Distance(CalculateGridIndex(gridPosition), CalculateGridIndex(structurePositionNearby));
+        return distance <= range; 
+    }
 }
 
 public enum Direction

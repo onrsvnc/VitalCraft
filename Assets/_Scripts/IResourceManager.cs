@@ -14,4 +14,7 @@ public interface IResourceManager
     int HowManyStructuresCanIPlace(int placementCost, int count);
     bool SpendMoney(int amount);
     void PrepareResourceManager(BuildingManager buildingManager);
+    void AddToPopulation(int value);   
+    void ReduceToPopulation(int value);
+    
 }

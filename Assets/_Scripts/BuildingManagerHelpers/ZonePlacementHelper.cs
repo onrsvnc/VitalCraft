@@ -97,6 +97,10 @@ public class ZonePlacementHelper : StructureModificationHelper
 
     public override void ConfirmModification()
     {
+        if (structureData.GetType() == typeof(ZoneStructureSO) && ((ZoneStructureSO)structureData).zoneType == ZoneType.Residential)
+        {
+            resourceManager.AddToPopulation(structuresToBeModified.Count);
+        }
         base.ConfirmModification();
         ResetZonePlacementHelper();
     }

@@ -33,6 +33,10 @@ public class UIController : MonoBehaviour
     public GameObject buildButtonPrefab;
 
     public TextMeshProUGUI moneyValue;
+    public TextMeshProUGUI populationValue;
+
+    public UIStructureInfoPanelHelper structurePanelHelper;
+
 
     void Start()
     {
@@ -46,9 +50,16 @@ public class UIController : MonoBehaviour
         confirmActionButton.onClick.AddListener(OnConfirmActionCallback);
     }
 
+    
+
     public void SetMoneyValue(int money)
     {
         moneyValue.text = money + "";
+    }
+
+    internal void SetPopulationValue(int population)
+    {
+        populationValue.text = population + "";
     }
 
     private void OnCloseMenuHandler()
@@ -68,6 +79,35 @@ public class UIController : MonoBehaviour
         buildingMenuPanel.SetActive(true);
         PrepareBuildMenu();
     }
+
+    #region StructureInfoPanelControls
+
+    public void DisplayBasicStructureInfo(StructureBaseSO data)
+    {
+        structurePanelHelper.DisplayBasicStructureInfo(data);
+    }
+
+    public void DisplayZoneStructureInfo(ZoneStructureSO data)
+    {
+        structurePanelHelper.DisplayZoneStructureInfo(data);
+    }
+
+    public void DisplayFacilityStructureInfo(SingleFacilitySO data)
+    {
+        structurePanelHelper.DisplayFacilityStructureInfo(data);
+    }
+
+    public void HideStructureInfo()
+    {
+        structurePanelHelper.Hide();
+    }
+
+    public bool GetStructureInfoVisibility()
+    {
+        return structurePanelHelper.gameObject.activeSelf;
+    }
+
+    #endregion
 
     public void OnBuildZoneCallback(string nameOfStructure) //Made public for testing.
     {
@@ -196,5 +236,5 @@ public class UIController : MonoBehaviour
         OnBuildRoadHandler -= listener;
     }
 
-
+    
 }

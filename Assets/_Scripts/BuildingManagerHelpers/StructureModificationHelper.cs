@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,7 @@ public abstract class StructureModificationHelper
         this.grid = grid;
         this.placementManager = placementManager;
         this.resourceManager = resourceManager;
+        structureData = ScriptableObject.CreateInstance<NullStructureSO>();
     }
 
     //This method is created for unit testing purposes.
@@ -32,7 +34,7 @@ public abstract class StructureModificationHelper
 
     public virtual void PrepareStructureForModification(Vector3 inputPosition, string structureName, StructureType structureType)
     {
-        if (structureData == null && structureType != StructureType.None)
+        if (structureData.GetType() == typeof(NullStructureSO) && structureType != StructureType.None)
         {
             structureData = this.structureRepository.GetStructureData(structureName, structureType);
         }
@@ -41,12 +43,16 @@ public abstract class StructureModificationHelper
     public virtual void ConfirmModification()
     {
         placementManager.PlaceStructuresOnTheMap(structuresToBeModified.Values);
+        Type structureType = structureData.GetType();
         foreach (var keyValuePair in structuresToBeModified)
         {
             grid.PlaceStructureOnTheGrid(keyValuePair.Value, keyValuePair.Key, GameObject.Instantiate(structureData));
+            StructureEconomyManager.CreateStructureLogic(structureType, keyValuePair.Key, grid);
         }
         ResetHelpersData();
     }
+
+    
 
     public virtual void CancelModification()
     {
@@ -57,7 +63,7 @@ public abstract class StructureModificationHelper
     private void ResetHelpersData()
     {
         structuresToBeModified.Clear();
-        structureData = null;
+        structureData = ScriptableObject.CreateInstance<NullStructureSO>();
     }
 
     public virtual void StopContinuousPlacement()

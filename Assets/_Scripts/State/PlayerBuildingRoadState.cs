@@ -36,6 +36,12 @@ public class PlayerBuildingRoadState : PlayerState
         base.OnConfirmAction();
     }
 
+    public override void OnDemolishAction()
+    {
+        this.buildingManager.CancelModification();
+        base.OnDemolishAction();
+    }
+
     public override void EnterState(string structureName)
     {
         this.buildingManager.PrepareBuildingManager(this.GetType());

@@ -12,12 +12,17 @@ public class ResourceManagerTestStub : MonoBehaviour, IResourceManager
 
     public void AddMoney(int amount)
     {
-        
+
+    }
+
+    public void AddToPopulation(int value)
+    {
+
     }
 
     public void CalculateTownIncome()
     {
-        
+
     }
 
     public bool CanIBuyIt(int amount)
@@ -32,7 +37,12 @@ public class ResourceManagerTestStub : MonoBehaviour, IResourceManager
 
     public void PrepareResourceManager(BuildingManager buildingManager)
     {
-        
+
+    }
+
+    public void ReduceToPopulation(int value)
+    {
+
     }
 
     public bool SpendMoney(int amount)

@@ -37,14 +37,13 @@ public class BuildingManager
 
     public void CancelModification()
     {
-        helper.CancelModification();
+        helper?.CancelModification();
     }
 
     public void PrepareStructureForDemolitionAt(Vector3 inputPosition)
     {
         helper.PrepareStructureForModification(inputPosition, "", StructureType.None);
     }
-
 
     //This method is created for unit testing purposes.
     public GameObject CheckForStructureInGrid(Vector3 inputPosition)
@@ -79,5 +78,15 @@ public class BuildingManager
     public IEnumerable<StructureBaseSO> GetAllStructures()
     {
         return grid.GetAllStructures();
+    }
+
+    public StructureBaseSO GetStructureDataFromPosition(Vector3 inputPosition)
+    {
+        Vector3 gridPosition = grid.CalculateGridPosition(inputPosition);
+        if (grid.IsCellTaken(gridPosition))
+        {
+            return grid.GetStructureDataFromTheGrid(inputPosition);
+        }
+        return null;
     }
 }

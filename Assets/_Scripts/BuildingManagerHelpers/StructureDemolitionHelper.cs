@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ public class StructureDemolitionHelper : StructureModificationHelper
                 resourceManager.AddMoney(resourceManager.DemolitionPrice);
                 RevokeStructureDemolitionAt(gridPositionInt, structure);
             }
-            else if(resourceManager.CanIBuyIt(resourceManager.DemolitionPrice))
+            else if (resourceManager.CanIBuyIt(resourceManager.DemolitionPrice))
             {
                 AddStructureForDemolition(gridPositionInt, structure);
                 resourceManager.SpendMoney(resourceManager.DemolitionPrice);
@@ -35,6 +36,7 @@ public class StructureDemolitionHelper : StructureModificationHelper
     {
         foreach (var gridPosition in structuresToBeModified.Keys)
         {
+            PrepareStructureForDemolition(gridPosition);
             grid.RemoveStructureFromTheGrid(gridPosition);
         }
         foreach (var keyValuePair in roadToDemolish)
@@ -48,6 +50,20 @@ public class StructureDemolitionHelper : StructureModificationHelper
         }
         this.placementManager.DestroyStructures(structuresToBeModified.Values);
         structuresToBeModified.Clear();
+    }
+
+    private void PrepareStructureForDemolition(Vector3Int gridPosition)
+    {
+        var data = grid.GetStructureDataFromTheGrid(gridPosition);
+        if (data != null)
+        {
+            Type dataType = data.GetType();
+            if (dataType == typeof(ZoneStructureSO) && ((ZoneStructureSO)data).zoneType == ZoneType.Residential)
+            {
+                resourceManager.ReduceToPopulation(1);
+            }
+            StructureEconomyManager.DemolitionStructureLogic(dataType, gridPosition, grid);
+        }
     }
 
     public override void CancelModification()
