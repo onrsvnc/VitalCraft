@@ -4,12 +4,14 @@ using UnityEngine;
 
 public abstract class PlayerState
 {
+    protected BuildingManager buildingManager;
     protected GameManager gameManager;
     protected CameraMovement cameraMovement;
 
-    public PlayerState(GameManager gameManager)
+    public PlayerState(GameManager gameManager, BuildingManager buildingManager)
     {
         this.gameManager = gameManager;
+        this.buildingManager = buildingManager;
         cameraMovement = gameManager.cameraMovement;
     }
 
@@ -50,18 +52,22 @@ public abstract class PlayerState
 
     public virtual void OnBuildZone(string structureName)
     {
+        this.buildingManager.CancelModification();
         this.gameManager.TransitionToState(this.gameManager.buildingZoneState, structureName);
     }
     public virtual void OnBuildSingleStructure(string structureName)
     {
+        this.buildingManager.CancelModification();
         this.gameManager.TransitionToState(this.gameManager.buildingSingleStructureState, structureName);
     }
     public virtual void OnBuildRoad(string structureName)
     {
+        this.buildingManager.CancelModification();
         this.gameManager.TransitionToState(this.gameManager.buildingRoadState, structureName);
     }
     public virtual void OnDemolishAction()
     {
+        this.buildingManager.CancelModification();
         this.gameManager.TransitionToState(this.gameManager.demolishState, null);
     }
 

@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class PlayerDemolitionState : PlayerState
 {
-    BuildingManager buildingManager;
 
-    public PlayerDemolitionState(GameManager gameManager, BuildingManager buildingManager):base (gameManager)
+    public PlayerDemolitionState(GameManager gameManager, BuildingManager buildingManager):base (gameManager, buildingManager)
     {
-        this.buildingManager = buildingManager; 
+        
     }
 
-    public override void OnCancel()
+    public override void OnCancel() 
     {
         this.buildingManager.CancelModification();
         this.gameManager.TransitionToState(this.gameManager.selectionState, null);
@@ -21,24 +20,6 @@ public class PlayerDemolitionState : PlayerState
     {
         this.buildingManager.ConfirmModification();
         base.OnConfirmAction();
-    }
-
-    public override void OnBuildRoad(string structureName)
-    {
-        this.buildingManager.CancelModification();
-        base.OnBuildRoad(structureName);
-    }
-
-    public override void OnBuildZone(string structureName)
-    {
-        this.buildingManager.CancelModification();
-        base.OnBuildZone(structureName);
-    }
-
-    public override void OnBuildSingleStructure(string structureName)
-    {
-        this.buildingManager.CancelModification();
-        base.OnBuildSingleStructure(structureName);
     }
 
     public override void OnInputPointerChange(Vector3 position)

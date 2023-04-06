@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerBuildingZoneState : PlayerState
-{
-
-    BuildingManager buildingManager;
+{ 
     string structureName;
 
-    public PlayerBuildingZoneState(GameManager gameManager, BuildingManager buildingManager) : base(gameManager)
+    public PlayerBuildingZoneState(GameManager gameManager, BuildingManager buildingManager) : base(gameManager, buildingManager)
     {
-        this.buildingManager = buildingManager;
+        
 
     }
 
@@ -18,23 +16,6 @@ public class PlayerBuildingZoneState : PlayerState
     {
         this.buildingManager.CancelModification();
         this.gameManager.TransitionToState(this.gameManager.selectionState, null);
-    }
-
-    public override void OnBuildRoad(string structureName)
-    {
-        this.buildingManager.CancelModification();
-        base.OnBuildRoad(structureName);
-    }
-    public override void OnBuildSingleStructure(string structureName)
-    {
-        this.buildingManager.CancelModification();
-        base.OnBuildSingleStructure(structureName);
-    }
-
-    public override void OnDemolishAction()
-    {
-        this.buildingManager.CancelModification();
-        base.OnDemolishAction();
     }
 
     public override void OnConfirmAction()

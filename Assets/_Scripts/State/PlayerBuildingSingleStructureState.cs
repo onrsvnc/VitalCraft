@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class PlayerBuildingSingleStructureState : PlayerState
 {
-    BuildingManager buildingManager;
     string structureName;
 
-    public PlayerBuildingSingleStructureState(GameManager gameManager, BuildingManager buildingManager) : base(gameManager)
+    public PlayerBuildingSingleStructureState(GameManager gameManager, BuildingManager buildingManager) : base(gameManager, buildingManager)
     {
-        this.buildingManager = buildingManager;
+        
     }
 
     public override void OnConfirmAction()
@@ -33,29 +32,13 @@ public class PlayerBuildingSingleStructureState : PlayerState
         return;
     }
 
-    public override void OnBuildZone(string structureName)
-    {
-        this.buildingManager.CancelModification();
-        base.OnBuildZone(structureName);
-    }
-
-    public override void OnBuildRoad(string structureName)
-    {
-        this.buildingManager.CancelModification();
-        base.OnBuildRoad(structureName);
-    }
-
     public override void OnCancel()
     {
         this.buildingManager.CancelModification();
         this.gameManager.TransitionToState(this.gameManager.selectionState, null);
     }
 
-    public override void OnDemolishAction()
-    {
-        this.buildingManager.CancelModification();
-        base.OnDemolishAction();
-    }
+    
 
     public override void EnterState(string structureName)
     {

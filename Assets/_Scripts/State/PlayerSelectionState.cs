@@ -5,12 +5,11 @@ using UnityEngine;
 
 public class PlayerSelectionState : PlayerState
 {
-    BuildingManager buildingManager;
     Vector3? previousPosition;
 
-    public PlayerSelectionState(GameManager gameManager, BuildingManager buildingManager) : base(gameManager)
+    public PlayerSelectionState(GameManager gameManager, BuildingManager buildingManager) : base(gameManager, buildingManager)
     {
-        this.buildingManager = buildingManager;
+        
     }
 
     private void UpdateStructureInfoPanel(StructureBaseSO data)
