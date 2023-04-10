@@ -6,6 +6,7 @@ using UnityEngine.TestTools;
 using UnityEngine.UI;
 using NSubstitute; //Using Nsubsitute tool for mocking objects. 
 
+
 namespace Tests
 {
     [TestFixture] //The [TestFixture] attribute is used in NUnit framework to mark a class that contains unit tests. 
@@ -15,6 +16,8 @@ namespace Tests
         UIController uiController;
         GameManager gameManagerComponent;
         PlacementManager placementManager; //Added line for testing.
+        AudioManager audioManager;
+
 
         // Old Test Setup without the use of Nsubstitute
         // [SetUp] // Init() will be executed before each test 
@@ -49,12 +52,16 @@ namespace Tests
         {
             UnityEngine.GameObject gameManagerObject = new UnityEngine.GameObject();
             UnityEngine.GameObject placementManagerTestGameObject = new UnityEngine.GameObject(); //Added line for testing
+            UnityEngine.GameObject audioManagerGameObject = new UnityEngine.GameObject();
             gameManagerObject.AddComponent<ResourceManagerTestStub>();
 
             var cameraMovementComponent = gameManagerObject.AddComponent<CameraMovement>();
 
             uiController = Substitute.For<UIController>(); //Usually interface or abstract classes are used to subsitute for.
             placementManager = Substitute.For<PlacementManager>(); //Added line for testing
+            audioManagerGameObject.AddComponent<AudioManager>();
+            audioManagerGameObject.GetComponent<AudioManager>().Equals(Substitute.For<AudioManager>()); 
+
 
             placementManagerTestGameObject.AddComponent<PlacementManager>(); //Added line for testing
             gameManagerComponent = gameManagerObject.AddComponent<GameManager>();

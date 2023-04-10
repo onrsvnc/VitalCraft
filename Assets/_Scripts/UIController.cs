@@ -14,6 +14,8 @@ public class UIController : MonoBehaviour
     private Action OnCancelActionHandler;
     private Action OnDemolishActionHandler;
     private Action OnConfirmActionHandler;
+    private Action OnOpenBuildMenuActionHandler;
+    private Action OnCloseMenuActionHandler;
 
     public StructureRepository structureRepository;
     public Button buildResidentialAreaButton; //This unused button is kept for testing purposes, as tests won't run without it.
@@ -37,7 +39,6 @@ public class UIController : MonoBehaviour
 
     public UIStructureInfoPanelHelper structurePanelHelper;
 
-
     void Start()
     {
         buildingMenuPanel.SetActive(false);
@@ -48,9 +49,14 @@ public class UIController : MonoBehaviour
         demolishButton.onClick.AddListener(OnDemolishHandler);
         closeBuildMenuButton.onClick.AddListener(OnCloseMenuHandler);
         confirmActionButton.onClick.AddListener(OnConfirmActionCallback);
+
+        SetupButtonSounds();
     }
 
-    
+    void OnDestroy()
+    {
+        RemoveButtonSoundListeners();
+    }
 
     public void SetMoneyValue(int money)
     {
@@ -64,6 +70,7 @@ public class UIController : MonoBehaviour
 
     private void OnCloseMenuHandler()
     {
+        OnCloseMenuActionHandler?.Invoke();
         buildingMenuPanel.SetActive(false);
     }
 
@@ -76,6 +83,7 @@ public class UIController : MonoBehaviour
 
     private void OnOpenBuildMenu()
     {
+        OnOpenBuildMenuActionHandler?.Invoke();
         buildingMenuPanel.SetActive(true);
         PrepareBuildMenu();
     }
@@ -105,6 +113,35 @@ public class UIController : MonoBehaviour
     public bool GetStructureInfoVisibility()
     {
         return structurePanelHelper.gameObject.activeSelf;
+    }
+
+    #endregion
+
+    #region ButtonSounds
+
+    private void SetupButtonSounds()
+    {
+        AddListenerOnBuildZoneEvent((s) => AudioManager.Instance.PlayButtonClickedSound());   //(s) => AudioManager.Instance.PlayPlaceBuildSound()                 
+        AddListenerOnCancelActionEvent(AudioManager.Instance.PlayButtonClickedSound);
+        //AddListenerOnConfirmActionEvent(Action listener);                 
+        AddListenerOnDemolishActionEvent(AudioManager.Instance.PlayButtonClickedSound);
+        AddListenerOnBuildSingleStructureEvent((s) => AudioManager.Instance.PlayButtonClickedSound());
+        AddListenerOnBuildRoadEvent((s) => AudioManager.Instance.PlayButtonClickedSound());
+        AddListenerOnOpenBuildMenuEvent(AudioManager.Instance.PlayButtonClickedSound);
+        AddListenerOnCloseMenuEvent(AudioManager.Instance.PlayButtonClickedSound);
+        
+    }
+
+    private void RemoveButtonSoundListeners()
+    {
+        RemoveListenerOnCancelActionEvent(AudioManager.Instance.PlayButtonClickedSound);
+        RemoveListenerOnBuildZoneEvent((s) => AudioManager.Instance.PlayPlaceBuildSound());
+        //RemoveListenerOnConfirmActionEvent(Action listener);
+        RemoveListenerOnDemolishActionEvent(AudioManager.Instance.PlayButtonClickedSound);
+        RemoveListenerOnBuildSingleStructureEvent((s) => AudioManager.Instance.PlayButtonClickedSound());
+        RemoveListenerOnBuildRoadEvent((s) => AudioManager.Instance.PlayButtonClickedSound());
+        RemoveListenerOnOpenBuildMenuEvent(AudioManager.Instance.PlayButtonClickedSound);
+        RemoveListenerOnCloseMenuEvent(AudioManager.Instance.PlayButtonClickedSound);
     }
 
     #endregion
@@ -202,7 +239,7 @@ public class UIController : MonoBehaviour
 
     public void RemoveListenerOnConfirmActionEvent(Action listener)
     {
-        OnCancelActionHandler -= listener;
+        OnConfirmActionHandler -= listener;
     }
 
 
@@ -236,5 +273,26 @@ public class UIController : MonoBehaviour
         OnBuildRoadHandler -= listener;
     }
 
-    
+    public void AddListenerOnOpenBuildMenuEvent(Action listener)
+    {
+        OnOpenBuildMenuActionHandler += listener;
+    }
+
+    public void RemoveListenerOnOpenBuildMenuEvent(Action listener)
+    {
+        OnOpenBuildMenuActionHandler -= listener;
+    }
+
+    public void AddListenerOnCloseMenuEvent(Action listener)
+    {
+        OnCloseMenuActionHandler += listener;
+    }
+
+    public void RemoveListenerOnCloseMenuEvent(Action listener)
+    {
+        OnCloseMenuActionHandler -= listener;
+    }
+
+
+
 }
