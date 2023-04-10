@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour
     public PlayerBuildingRoadState buildingRoadState;
     public PlayerBuildingZoneState buildingZoneState;
 
+    public NatureManager natureManager;
+
     public PlayerState State { get => state; } //Exposed for testing purposes
 
     void Awake()
@@ -42,7 +44,7 @@ public class GameManager : MonoBehaviour
 
     private void PrepareStates()
     {
-        buildingManager = new BuildingManager(cellSize, width, length, placementManager, structureRepository, resourceManager);
+        buildingManager = new BuildingManager(natureManager.Grid, placementManager, structureRepository, resourceManager);
         resourceManager.PrepareResourceManager(buildingManager);
         selectionState = new PlayerSelectionState(this, buildingManager);
         demolishState = new PlayerDemolitionState(this, buildingManager);
@@ -55,7 +57,9 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         placementManager = placementManagerGameObject.GetComponent<IPlacementManager>();
-        resourceManager = resourceManagerGameObject.GetComponent<IResourceManager>(); 
+        placementManager.PreparePlacementManager(natureManager);
+        resourceManager = resourceManagerGameObject.GetComponent<IResourceManager>();
+        natureManager.PrepareNature(cellSize, width, length);
         PrepareStates();
         PrepareGameComponents();
         AssignInputListeners();

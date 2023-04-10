@@ -7,6 +7,7 @@ public class PlacementManager : MonoBehaviour, IPlacementManager
     public Transform ground;
     public Material transparentMaterial;
     private Dictionary<GameObject, Material[]> originalMaterials = new Dictionary<GameObject, Material[]>();
+    private NatureManager natureManager;
 
     // CreateBuilding() can be placed in BuildingManager for now it is here.
     // Old Non-Ghost building system code.
@@ -73,9 +74,8 @@ public class PlacementManager : MonoBehaviour, IPlacementManager
     {
         foreach (var structure in structureCollection)
         {
-
+            natureManager.DestroyNatureAtLocation(structure.transform.position);
             ResetBuildingLook(structure);
-
         }
         originalMaterials.Clear();
     }
@@ -132,5 +132,10 @@ public class PlacementManager : MonoBehaviour, IPlacementManager
             gameObjectToReuse.transform.GetChild(i).rotation = prefab.transform.GetChild(i).rotation;
         }
         return gameObjectToReuse;
+    }
+
+    public void PreparePlacementManager(NatureManager natureManager)
+    {
+        this.natureManager = natureManager;
     }
 }

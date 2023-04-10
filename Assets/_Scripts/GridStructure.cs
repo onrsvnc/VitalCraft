@@ -193,7 +193,21 @@ public class GridStructure
     public bool ArePositionsInRange(Vector3Int gridPosition, Vector3Int structurePositionNearby, int range)
     {
         var distance = Vector2.Distance(CalculateGridIndex(gridPosition), CalculateGridIndex(structurePositionNearby));
-        return distance <= range; 
+        return distance <= range;
+    }
+
+    public void AddNatureToCell(Vector3 position, GameObject natureElement)
+    {
+        var gridPosition = CalculateGridPosition(position);
+        var gridIndex = CalculateGridIndex(gridPosition);
+        grid[gridIndex.y, gridIndex.x].AddNatureObject(natureElement);
+    }
+
+    public List<GameObject> GetNatureObjectsToRemove(Vector3 position)
+    {
+        var gridPosition = CalculateGridPosition(position);
+        var gridIndex = CalculateGridIndex(gridPosition);
+        return grid[gridIndex.y,gridIndex.x].GetNatureOnThisCell();
     }
 }
 

@@ -12,4 +12,5 @@ public interface IPlacementManager
     void SetBuildingForDemolition(GameObject structureToDemolish);
     GameObject PlaceStructureOnTheMap(Vector3 gridPosition, GameObject buildingPrefab, RotationValue rotationValue);
     GameObject MoveStructureOnTheMap(Vector3Int positionToPlaceStructure, GameObject gameObjectToReuse, GameObject prefab);
+    void PreparePlacementManager(NatureManager natureManager);
 }
