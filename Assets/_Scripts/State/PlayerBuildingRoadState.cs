@@ -35,7 +35,7 @@ public class PlayerBuildingRoadState : PlayerState
         this.structureName = structureName;
     }
 
-    public override void OnInputPointerDown(Vector3 position)
+    public override void OnInputPointerChange(Vector3 position)
     {
         this.buildingManager.PrepareStructureForModification(position, structureName, StructureType.Road);
     }

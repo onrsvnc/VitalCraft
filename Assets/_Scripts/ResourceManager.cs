@@ -89,7 +89,7 @@ public class ResourceManager : MonoBehaviour, IResourceManager
 
     private void UpdateUI()
     {
-        uiController.SetMoneyValue(moneyHelper.Money);
+        uiController.SetMoneyValue(moneyHelper.Money , moneyHelper.CurrentBalance);
         uiController.SetPopulationValue(populationHelper.Population);
     }
 

@@ -6,10 +6,13 @@ using UnityEngine;
 public class PlayerSelectionState : PlayerState
 {
     Vector3? previousPosition;
+    GameObject? previousModel;
+
+    private Dictionary<GameObject, Material[]> originalMaterials = new Dictionary<GameObject, Material[]>();
 
     public PlayerSelectionState(GameManager gameManager, BuildingManager buildingManager) : base(gameManager, buildingManager)
     {
-        
+
     }
 
     private void UpdateStructureInfoPanel(StructureBaseSO data)
@@ -29,27 +32,66 @@ public class PlayerSelectionState : PlayerState
         }
     }
 
+    private void DeactivateRangeIndicator()
+    {
+        foreach (Transform child in previousModel.transform)
+        {
+            MeshRenderer structureMesh = child.GetComponent<MeshRenderer>();
+            Color color = structureMesh.material.color;
+            color.a = 0f;
+            structureMesh.material.color = color;
+        }
+    }
+
+    private void ActivateRangeIndicator(GameObject structureModel)
+    {
+        foreach (Transform child in structureModel.transform)
+        {
+            MeshRenderer structureMesh = child.GetComponent<MeshRenderer>();
+            Color color = structureMesh.material.color;
+            color.a = 1f;
+            structureMesh.material.color = color;
+        }
+        previousModel = structureModel;
+    }
+
     public override void OnInputPointerChange(Vector3 position)
     {
         // Debug.Log(position); // GroundPos at y=-1 with height=1 causes y-coordinate issue: -0.5
     }
 
+
     public override void OnInputPointerDown(Vector3 position)
     {
         StructureBaseSO data = buildingManager.GetStructureDataFromPosition(position);
+        UnityEngine.GameObject structureModel = buildingManager.CheckForStructureInGrid(position);
         if (data)
         {
+            if (data.GetType() == typeof(SingleFacilitySO))
+            {
+                ActivateRangeIndicator(structureModel);
+            }
+            else if(previousModel)
+            {
+                DeactivateRangeIndicator();
+            }
             UpdateStructureInfoPanel(data);
             previousPosition = position;
         }
         else
         {
+            if (previousModel)
+            {
+                DeactivateRangeIndicator();
+            }
             this.gameManager.uiController.HideStructureInfo();
             data = null;
             previousPosition = null;
         }
         return;
     }
+
+    
 
     public override void OnInputPointerUp()
     {

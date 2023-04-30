@@ -58,9 +58,11 @@ public class UIController : MonoBehaviour
         RemoveButtonSoundListeners();
     }
 
-    public void SetMoneyValue(int money)
+    public void SetMoneyValue(int money, int currentBalance)
     {
-        moneyValue.text = money + "";
+        string moneyFormatted = money.ToString("N0").Replace(",", ".");
+        string currentBalanceFormatted = currentBalance.ToString("N0").Replace(",", ".");
+        moneyValue.text = moneyFormatted + "\nIncome: " + currentBalanceFormatted;
     }
 
     internal void SetPopulationValue(int population)
@@ -184,12 +186,12 @@ public class UIController : MonoBehaviour
 
     private void PrepareBuildMenu()
     {
-        CreateButtonsInPanel(zonesPanel.transform, structureRepository.GetZoneNames(), OnBuildZoneCallback);
-        CreateButtonsInPanel(roadsPanel.transform, new List<string>() { structureRepository.GetRoadStructureName() }, OnBuildRoadCallback);
-        CreateButtonsInPanel(facilitiesPanel.transform, structureRepository.GetSingleStructureNames(), OnBuildSingleStructureCallback);
+        CreateButtonsInPanel(zonesPanel.transform, structureRepository.GetZoneNames(), OnBuildZoneCallback, structureRepository.GetZoneCosts());
+        CreateButtonsInPanel(roadsPanel.transform, new List<string>() { structureRepository.GetRoadStructureName() }, OnBuildRoadCallback, new List<int>() {structureRepository.GetRoadStructureCost()});
+        CreateButtonsInPanel(facilitiesPanel.transform, structureRepository.GetSingleStructureNames(), OnBuildSingleStructureCallback, structureRepository.GetSingleStructureCosts());
     }
 
-    private void CreateButtonsInPanel(Transform panelTransform, List<string> dataToShow, Action<string> callback)
+    private void CreateButtonsInPanel(Transform panelTransform, List<string> dataToShow, Action<string> callback, List<int> costToShow)
     {
         if (dataToShow.Count > panelTransform.childCount)
         {
@@ -204,7 +206,9 @@ public class UIController : MonoBehaviour
             var button = panelTransform.GetChild(i).GetComponent<Button>();
             if (button != null)
             {
-                button.GetComponentInChildren<TextMeshProUGUI>().SetText(dataToShow[i]); //SetText() used instead of <TextMeshProUGUI>().text = dataToShow[i]; to avoid creating a new string object every time the text is updated. Might result in a bug?
+                var textComponents = button.GetComponentsInChildren<TextMeshProUGUI>();
+                textComponents[0].SetText(dataToShow[i].ToString());
+                textComponents[1].SetText("Cost: " + costToShow[i].ToString());//SetText() used instead of <TextMeshProUGUI>().text = dataToShow[i]; to avoid creating a new string object every time the text is updated. Might result in a bug?
                 button.onClick.RemoveAllListeners();
                 button.onClick.AddListener(() => callback(button.GetComponentInChildren<TextMeshProUGUI>().text));
             }

@@ -50,7 +50,7 @@ public class PlacementManager : MonoBehaviour, IPlacementManager
         return newStructure;
     }
 
-    private void ModifyStructurePrefabLook(GameObject newStructure, Color colorToSet)
+    public void ModifyStructurePrefabLook(GameObject newStructure, Color colorToSet) //exposed to use from structure info to see the range
     {
         foreach (Transform child in newStructure.transform)
         {

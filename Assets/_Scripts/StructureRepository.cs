@@ -24,6 +24,23 @@ public class StructureRepository : MonoBehaviour
         return modelDataCollection.roadStructure.buildingName;
     }
 
+    public List<int> GetZoneCosts()
+    {
+        return modelDataCollection.zonesList.Select(zone => zone.placementCost).ToList();
+    }
+
+    public List<int> GetSingleStructureCosts()
+    {
+        return modelDataCollection.singleStructureList.Select(facility => facility.placementCost).ToList();
+    }
+
+    public int GetRoadStructureCost()
+    {
+        return modelDataCollection.roadStructure.placementCost;
+    } 
+
+
+
     public GameObject GetBuildingPrefabByName(string structureName, StructureType structureType)
     {
         GameObject structurePrefabToReturn = null;
@@ -88,6 +105,7 @@ public class StructureRepository : MonoBehaviour
         }
         return null;
     }
+
 }
 
 public enum StructureType
