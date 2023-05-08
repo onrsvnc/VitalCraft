@@ -41,7 +41,6 @@ public class AudioManager : MonoBehaviour
 
     public void PlayDemolitionSound()
     {
-        Debug.Log("deleteme");
         effectAudioSource.Stop();
         effectAudioSource.clip = removeBuildingSound;
         effectAudioSource.Play();

@@ -15,7 +15,7 @@ public class CameraMovement : MonoBehaviour
 
     void Update()
     {
-
+        
     }
 
     public void MoveCamera(Vector3 pointerPosition)

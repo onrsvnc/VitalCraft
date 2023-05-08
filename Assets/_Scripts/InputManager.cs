@@ -20,6 +20,16 @@ public class InputManager : MonoBehaviour, IInputManager
     {
         GetPointerPosition();
         GetPanningPointer();
+
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            ExitGame();
+        }
+    }
+
+    private void ExitGame()
+    {
+        Application.Quit();
     }
 
     private void GetPointerPosition()

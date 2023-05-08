@@ -111,6 +111,8 @@ public class ResourceManager : MonoBehaviour, IResourceManager
         UpdateUI();
     }
 
+    
+
     // Update is called once per frame
     void Update()
     {

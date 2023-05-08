@@ -67,7 +67,7 @@ public class UIController : MonoBehaviour
 
     internal void SetPopulationValue(int population)
     {
-        populationValue.text = population + "";
+        populationValue.text = "Population\n " + population;
     }
 
     private void OnCloseMenuHandler()

@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerSelectionState : PlayerState
 {
     Vector3? previousPosition;
-    GameObject? previousModel;
+    GameObject previousModel;
 
     private Dictionary<GameObject, Material[]> originalMaterials = new Dictionary<GameObject, Material[]>();
 

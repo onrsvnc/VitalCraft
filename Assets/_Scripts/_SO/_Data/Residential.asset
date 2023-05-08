@@ -18,7 +18,7 @@ MonoBehaviour:
   upkeepCost: 0
   income: 10
   requireRoadAccess: 1
-  requireWater: 1
+  requireWater: 0
   requirePower: 1
   structureRange: 1
   upgradable: 1
